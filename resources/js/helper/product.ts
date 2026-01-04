@@ -80,3 +80,42 @@ export const products = [
         hasImage: false,
     },
 ];
+
+export const welcomeProducts = [
+    {
+        id: 1,
+        name: 'Kampas Rem Depan (Brake Pads Front)',
+        compatibility: 'Honda Vario 150',
+        price: 45000,
+        status: 'in_stock',
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAPREB0C-nwzck1ZkA7VvLDEa_SdSeTxhfR77XIPmzT7FGf5Y-H5JFI6DyU3LyOdKTd7IOYkkIGl5YGgbV8i6UkhR0oRE_kxULMY8NAHhzK27u1wextPPTCKEeGH5xkmLVetZpdEQlUteoOj0KGAHhD621RoYJqhH5aaEibKqGZ9sGl1QYQWf-IJPTGTjMGSrC6uZoWM6rrZ7wdr4Pu2c8yY2TAWmMsl9djvzswecuXXZHgb97XHi3Qk5OoqJVu2QaKZWgRpxsOlag',
+        hasImage: true,
+    },
+    {
+        id: 2,
+        name: 'Oli Mesin Yamalube Super Matic',
+        compatibility: 'Yamaha NMAX',
+        price: 68000,
+        status: 'in_stock',
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBSmtFBELKZum6JPbYF3BzcZusn6z-h0LD022XnbIeyzKKXqzvlLBDFRyNwiI-Aje_wJbbEuFL0THV1QO_zei8QQA9oJqh_eZ7u-HyytRnuigDnwJW-rrk5aR8k69LgKEvb-gsZIrfxQXCX6U1gRlbHdbeNnYG2YTCMmPrSBr8EATggRqpytTEjXhQR0DNXU0HBWzVayslKbG0k3ymTHxy7jndzTURPTGm43lakCAz7ssjy6awPA0v5oIhC6QghkNJkyIWXS4SDhTw',
+        hasImage: true,
+    },
+    {
+        id: 3,
+        name: 'V-Belt Drive Belt Kit',
+        compatibility: 'Honda Beat FI',
+        price: 125000,
+        status: 'low_stock',
+        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAFhg_RxaCQlaiZ-MH_vfmMYASnh0OkPJL6qBG5xYN8uCuBgvxl0WbE0pQ7MM5pb-7VD1GfO78e5JAwBe1VxFgQJWYOsYPm2Bix_yDxl_UYMBetd_DKY85nknMzwUjDeJoXVwsp4ewMroIV69g23GIjn80MeOxyaz6zpwCwzGX_0kt_NN-SLVeFagNr3mliaYKxnW3bfZsGB4S6qPUPpcv0WC_bExGyVfLzDaKavegXs5k-r2EL-VwpXeO5nlFudYKktJnThNQOz94',
+        hasImage: true,
+    },
+    {
+        id: 4,
+        name: 'Busi NGK Spark Plug CPR9EA-9',
+        compatibility: 'Universal',
+        price: 15000,
+        status: 'in_stock',
+        icon: SettingsIcon,
+        hasImage: false,
+    },
+];

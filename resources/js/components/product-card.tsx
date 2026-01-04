@@ -1,5 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
+import { Link } from '@inertiajs/react';
 import { BellIcon, ShoppingCartIcon } from 'lucide-react';
 
 // Helper function untuk format harga
@@ -55,57 +56,64 @@ const ProductCard = ({ product }: { product: Product }) => {
     const isOutOfStock = product.status === 'out_of_stock';
 
     return (
-        <Card className="group overflow-hidden border transition-all hover:shadow-lg">
-            <CardContent className="p-4">
-                {/* Image Section */}
-                <div className="relative mb-4 aspect-square w-full overflow-hidden rounded-xl bg-muted">
-                    {product.hasImage ? (
-                        <div
-                            className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                            style={{
-                                backgroundImage: `url('${product.image}')`,
-                            }}
-                        />
-                    ) : (
-                        <div className="absolute inset-0 flex items-center justify-center text-muted-foreground/30">
-                            {product.icon && <product.icon />}
-                        </div>
-                    )}
-                    <Badge
-                        className={`absolute top-3 right-3 ${statusBadge.className} border-0`}
-                    >
-                        {statusBadge.text}
-                    </Badge>
-                </div>
+        <Link href={`/products/${product.id}`} className="h-full">
+            <Card className="group flex h-full cursor-pointer flex-col overflow-hidden border transition-all hover:shadow-lg">
+                <CardContent className="flex flex-1 flex-col p-4">
+                    {/* Image Section */}
+                    <div className="relative mb-4 aspect-square w-full overflow-hidden rounded-xl bg-muted">
+                        {product.hasImage ? (
+                            <div
+                                className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                style={{
+                                    backgroundImage: `url('${product.image}')`,
+                                }}
+                            />
+                        ) : (
+                            <div className="absolute inset-0 flex items-center justify-center text-muted-foreground/30">
+                                {product.icon && <product.icon />}
+                            </div>
+                        )}
+                        <Badge
+                            className={`absolute top-3 right-3 ${statusBadge.className} border-0`}
+                        >
+                            {statusBadge.text}
+                        </Badge>
+                    </div>
 
-                {/* Content Section */}
-                <div className="flex flex-col gap-1">
-                    <div className="text-xs font-medium text-muted-foreground">
-                        Kompatibel: {product.compatibility}
+                    {/* Content Section */}
+                    <div className="flex flex-1 flex-col">
+                        <div className="text-xs font-medium text-muted-foreground">
+                            Kompatibel: {product.compatibility}
+                        </div>
+                        <h3 className="line-clamp-2 min-h-[3.5rem] text-lg font-bold transition-colors group-hover:text-blue-600">
+                            {product.name}
+                        </h3>
+                        <div className="mt-auto flex items-center justify-between pt-2">
+                            <span
+                                className={`text-xl font-bold ${isOutOfStock ? 'text-muted-foreground' : 'text-blue-600'}`}
+                            >
+                                {formatPrice(product.price)}
+                            </span>
+                            <button
+                                disabled={isOutOfStock}
+                                onClick={(e) => e.preventDefault()}
+                                className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${
+                                    isOutOfStock
+                                        ? 'cursor-not-allowed bg-muted text-muted-foreground'
+                                        : 'bg-muted text-muted-foreground hover:bg-blue-600 hover:text-white'
+                                }`}
+                            >
+                                {isOutOfStock ? (
+                                    <BellIcon className="h-4 w-4" />
+                                ) : (
+                                    <ShoppingCartIcon className="h-4 w-4" />
+                                )}
+                            </button>
+                        </div>
                     </div>
-                    <h3 className="line-clamp-2 text-lg font-bold">
-                        {product.name}
-                    </h3>
-                    <div className="mt-2 flex items-center justify-between">
-                        <span
-                            className={`text-xl font-bold ${isOutOfStock ? 'text-muted-foreground' : 'text-blue-600'}`}
-                        >
-                            {formatPrice(product.price)}
-                        </span>
-                        <button
-                            disabled={isOutOfStock}
-                            className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${
-                                isOutOfStock
-                                    ? 'cursor-not-allowed bg-muted text-muted-foreground'
-                                    : 'bg-muted text-muted-foreground hover:bg-blue-600 hover:text-white'
-                            }`}
-                        >
-                            {isOutOfStock ? <BellIcon /> : <ShoppingCartIcon />}
-                        </button>
-                    </div>
-                </div>
-            </CardContent>
-        </Card>
+                </CardContent>
+            </Card>
+        </Link>
     );
 };
 

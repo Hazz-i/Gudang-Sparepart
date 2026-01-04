@@ -14,6 +14,12 @@ Route::get('/products', function () {
     return Inertia::render('products/index');
 })->name('products.index');
 
+Route::get('/products/{id}', function ($id) {
+    return Inertia::render('products/show', [
+        'productId' => $id,
+    ]);
+})->name('products.show');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
