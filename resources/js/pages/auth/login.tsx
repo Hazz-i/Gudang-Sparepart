@@ -1,15 +1,12 @@
 import InputError from '@/components/input-error';
-import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import AuthLayout from '@/layouts/auth-layout';
-import { register } from '@/routes';
 import { store } from '@/routes/login';
-import { request } from '@/routes/password';
 import { Form, Head } from '@inertiajs/react';
+import { Lock, User } from 'lucide-react';
 
 interface LoginProps {
     status?: string;
@@ -17,104 +14,129 @@ interface LoginProps {
     canRegister: boolean;
 }
 
-export default function Login({
-    status,
-    canResetPassword,
-    canRegister,
-}: LoginProps) {
+export default function Login({ status }: LoginProps) {
     return (
-        <AuthLayout
-            title="Log in to your account"
-            description="Enter your email and password below to log in"
-        >
-            <Head title="Log in" />
+        <div className="flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-slate-100 px-4 dark:bg-slate-900">
+            <Head title="Login" />
 
-            <Form
-                {...store.form()}
-                resetOnSuccess={['password']}
-                className="flex flex-col gap-6"
-            >
-                {({ processing, errors }) => (
-                    <>
-                        <div className="grid gap-6">
-                            <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    name="email"
-                                    required
-                                    autoFocus
-                                    tabIndex={1}
-                                    autoComplete="email"
-                                    placeholder="email@example.com"
-                                />
+            {/* Login Card */}
+            <div className="w-full max-w-sm rounded-xl border border-slate-200 bg-white p-8 shadow-xl dark:border-slate-800 dark:bg-slate-800">
+                {/* Header */}
+                <div className="mb-6 text-center">
+                    <h1 className="text-xl font-bold text-slate-900 dark:text-white">
+                        Selamat Datang
+                    </h1>
+                    <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                        Masuk untuk mengelola stok dan pesanan.
+                    </p>
+                </div>
+
+                {status && (
+                    <div className="mb-4 text-center text-sm font-medium text-green-600">
+                        {status}
+                    </div>
+                )}
+
+                <Form
+                    {...store.form()}
+                    resetOnSuccess={['password']}
+                    className="space-y-5"
+                >
+                    {({ processing, errors }) => (
+                        <>
+                            {/* Email Input */}
+                            <div>
+                                <Label
+                                    htmlFor="email"
+                                    className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
+                                >
+                                    Email atau Username
+                                </Label>
+                                <div className="relative">
+                                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <User className="h-5 w-5 text-slate-400" />
+                                    </div>
+                                    <Input
+                                        id="email"
+                                        type="email"
+                                        name="email"
+                                        required
+                                        autoFocus
+                                        tabIndex={1}
+                                        autoComplete="email"
+                                        placeholder="admin@motoparts.com"
+                                        className="block w-full rounded-lg border-slate-300 bg-slate-50 py-2.5 pl-10 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:bg-white focus:ring-blue-600 dark:border-slate-700 dark:bg-slate-800/50 dark:text-white dark:placeholder-slate-500 dark:focus:bg-slate-800"
+                                    />
+                                </div>
                                 <InputError message={errors.email} />
                             </div>
 
-                            <div className="grid gap-2">
-                                <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
-                                    {canResetPassword && (
-                                        <TextLink
-                                            href={request()}
-                                            className="ml-auto text-sm"
-                                            tabIndex={5}
-                                        >
-                                            Forgot password?
-                                        </TextLink>
-                                    )}
+                            {/* Password Input */}
+                            <div>
+                                <Label
+                                    htmlFor="password"
+                                    className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
+                                >
+                                    Password
+                                </Label>
+                                <div className="relative">
+                                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                        <Lock className="h-5 w-5 text-slate-400" />
+                                    </div>
+                                    <Input
+                                        id="password"
+                                        type="password"
+                                        name="password"
+                                        required
+                                        tabIndex={2}
+                                        autoComplete="current-password"
+                                        placeholder="••••••••"
+                                        className="block w-full rounded-lg border-slate-300 bg-slate-50 py-2.5 pl-10 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-600 focus:bg-white focus:ring-blue-600 dark:border-slate-700 dark:bg-slate-800/50 dark:text-white dark:placeholder-slate-500 dark:focus:bg-slate-800"
+                                    />
                                 </div>
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    name="password"
-                                    required
-                                    tabIndex={2}
-                                    autoComplete="current-password"
-                                    placeholder="Password"
-                                />
                                 <InputError message={errors.password} />
                             </div>
 
-                            <div className="flex items-center space-x-3">
-                                <Checkbox
-                                    id="remember"
-                                    name="remember"
-                                    tabIndex={3}
-                                />
-                                <Label htmlFor="remember">Remember me</Label>
+                            {/* Remember & Forgot Password */}
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-2">
+                                    <Checkbox
+                                        id="remember"
+                                        name="remember"
+                                        tabIndex={3}
+                                        className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-600 dark:border-slate-600"
+                                    />
+                                    <Label
+                                        htmlFor="remember"
+                                        className="text-sm text-slate-600 dark:text-slate-400"
+                                    >
+                                        Ingat saya
+                                    </Label>
+                                </div>
                             </div>
 
+                            {/* Submit Button */}
                             <Button
                                 type="submit"
-                                className="mt-4 w-full"
+                                className="flex w-full justify-center rounded-lg bg-blue-600 px-3 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"
                             >
                                 {processing && <Spinner />}
-                                Log in
+                                Masuk ke Dashboard
                             </Button>
-                        </div>
+                        </>
+                    )}
+                </Form>
 
-                        {canRegister && (
-                            <div className="text-center text-sm text-muted-foreground">
-                                Don't have an account?{' '}
-                                <TextLink href={register()} tabIndex={5}>
-                                    Sign up
-                                </TextLink>
-                            </div>
-                        )}
-                    </>
-                )}
-            </Form>
-
-            {status && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
-                    {status}
+                {/* Footer */}
+                <div className="mt-6 border-t border-slate-100 pt-6 dark:border-slate-700/50">
+                    <p className="text-center text-xs text-slate-500 dark:text-slate-400">
+                        © 2026 Gudang Sparepart Admin Panel.
+                    </p>
                 </div>
-            )}
-        </AuthLayout>
+            </div>
+        </div>
     );
 }
