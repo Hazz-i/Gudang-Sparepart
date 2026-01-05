@@ -20,6 +20,10 @@ Route::get('/products/{id}', function ($id) {
     ]);
 })->name('products.show');
 
+Route::get('/booking-status', function () {
+    return Inertia::render('booking-status');
+})->name('booking.status');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
