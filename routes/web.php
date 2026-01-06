@@ -4,6 +4,12 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
+
+// GUEST ROUTES
+Route::get('/register', function () {
+    return redirect()->route('login');
+})->name('register');
+
 Route::get('/', function () {
     return Inertia::render('welcome', [
         'canRegister' => Features::enabled(Features::registration()),
@@ -24,6 +30,8 @@ Route::get('/booking-status', function () {
     return Inertia::render('booking-status');
 })->name('booking.status');
 
+
+// ADMIN ROUTES
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');

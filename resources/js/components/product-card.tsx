@@ -1,7 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Link } from '@inertiajs/react';
-import { BellIcon, ShoppingCartIcon } from 'lucide-react';
+import { BellIcon } from 'lucide-react';
 
 // Helper function untuk format harga
 const formatPrice = (price: number) => {
@@ -95,18 +95,16 @@ const ProductCard = ({ product }: { product: Product }) => {
                                 {formatPrice(product.price)}
                             </span>
                             <button
-                                disabled={isOutOfStock}
+                                disabled
                                 onClick={(e) => e.preventDefault()}
-                                className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${
+                                className={`h-8 w-8 items-center justify-center rounded-full transition-colors ${
                                     isOutOfStock
-                                        ? 'cursor-not-allowed bg-muted text-muted-foreground'
-                                        : 'bg-muted text-muted-foreground hover:bg-blue-600 hover:text-white'
+                                        ? 'flex bg-muted text-muted-foreground hover:bg-blue-600 hover:text-white'
+                                        : 'hidden'
                                 }`}
                             >
-                                {isOutOfStock ? (
+                                {isOutOfStock && (
                                     <BellIcon className="h-4 w-4" />
-                                ) : (
-                                    <ShoppingCartIcon className="h-4 w-4" />
                                 )}
                             </button>
                         </div>
