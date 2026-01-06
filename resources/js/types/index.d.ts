@@ -27,7 +27,19 @@ export interface SharedData {
     quote: { message: string; author: string };
     auth: Auth;
     sidebarOpen: boolean;
+    products?: Product[];
     [key: string]: unknown;
+}
+
+export interface Product {
+    id: number;
+    name: string;
+    price: number;
+    original_price: number;
+    status: string;
+    category: string;
+    image_url?: string;
+    icon?: React.ComponentType;
 }
 
 export interface User {

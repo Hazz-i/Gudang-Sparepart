@@ -2,15 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+use App\Models\Product;
+
+class GuestController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
+    public function index()
+    {
+        $products = Product::where('status', 'in_stock')->limit(8)->get();
+        return inertia('welcome', [
+            'products' => $products,
+        ]);
+    }
+
+    public function allProducts(Request $request)
     {
         $query = Product::query();
 
@@ -46,63 +52,12 @@ class ProductController extends Controller
             'brands' => $brands,
             'filters' => $request->only(['category', 'brand', 'status', 'search']),
         ]);
-    }
+    }   
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function productShow(Product $product)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Product $product)
-    {
-        // Get related products from the same category
-        $relatedProducts = Product::where('category', $product->category)
-            ->where('id', '!=', $product->id)
-            ->where('status', '!=', 'out_of_stock')
-            ->limit(4)
-            ->get();
-
         return inertia('products/show', [
             'product' => $product,
-            'relatedProducts' => $relatedProducts,
         ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Product $product)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Product $product)
-    {
-        //
-    }
+    }   
 }

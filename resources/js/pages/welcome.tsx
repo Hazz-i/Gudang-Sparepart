@@ -4,11 +4,18 @@ import Navbar from '@/components/layouts/navbar';
 import ProductCard from '@/components/product-card';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { products } from '@/helper/product';
-import { type SharedData } from '@/types';
+import { type Product, type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { ArrowRightIcon, CircleIcon, CogIcon, DiscIcon, DropletIcon, MessagesSquareIcon, PackageIcon, StoreIcon } from 'lucide-react';
-
+import {
+    ArrowRightIcon,
+    CircleIcon,
+    CogIcon,
+    DiscIcon,
+    DropletIcon,
+    MessagesSquareIcon,
+    PackageIcon,
+    StoreIcon,
+} from 'lucide-react';
 
 // Data kategori
 const categories = [
@@ -72,7 +79,7 @@ const userAvatars = [
 ];
 
 export default function Welcome() {
-    const { auth } = usePage<SharedData>().props;
+    const { auth, products } = usePage<SharedData>().props;
 
     return (
         <>
@@ -162,7 +169,7 @@ export default function Welcome() {
                         </div>
 
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                            {products?.map((product) => (
+                            {products?.map((product: Product) => (
                                 <ProductCard
                                     key={product.id}
                                     product={product}

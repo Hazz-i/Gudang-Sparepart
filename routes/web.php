@@ -4,27 +4,21 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
+use App\Http\Controllers\GuestController;
+use App\Http\Controllers\ProductController;
+
 
 // GUEST ROUTES
 Route::get('/register', function () {
     return redirect()->route('login');
 })->name('register');
 
-Route::get('/', function () {
-    return Inertia::render('welcome', [
-        'canRegister' => Features::enabled(Features::registration()),
-    ]);
-})->name('home');
+Route::get('/', [GuestController::class, 'index'])->name('home');
 
-Route::get('/products', function () {
-    return Inertia::render('products/index');
-})->name('products.index');
-
-Route::get('/products/{id}', function ($id) {
-    return Inertia::render('products/show', [
-        'productId' => $id,
-    ]);
-})->name('products.show');
+Route::get('/products', [GuestController::class, 'allProducts'])->name('products.index');
+Route::get('/products/{product}', [GuestController::class, 'productShow'])->name('products.show');
+// Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+// Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 
 Route::get('/booking-status', function () {
     return Inertia::render('booking-status');

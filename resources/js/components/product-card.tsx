@@ -1,5 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
+import { Product } from '@/types';
 import { Link } from '@inertiajs/react';
 import { BellIcon } from 'lucide-react';
 
@@ -39,18 +40,6 @@ const getStatusBadge = (status: string) => {
     }
 };
 
-// Komponen ProductCard
-interface Product {
-    id: number;
-    name: string;
-    compatibility: string;
-    price: number;
-    status: string;
-    image?: string;
-    icon?: React.ComponentType;
-    hasImage: boolean;
-}
-
 const ProductCard = ({ product }: { product: Product }) => {
     const statusBadge = getStatusBadge(product.status);
     const isOutOfStock = product.status === 'out_of_stock';
@@ -61,11 +50,11 @@ const ProductCard = ({ product }: { product: Product }) => {
                 <CardContent className="flex flex-1 flex-col p-4">
                     {/* Image Section */}
                     <div className="relative mb-4 aspect-square w-full overflow-hidden rounded-xl bg-muted">
-                        {product.hasImage ? (
+                        {product.image_url ? (
                             <div
                                 className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
                                 style={{
-                                    backgroundImage: `url('${product.image}')`,
+                                    backgroundImage: `url('${product.image_url}')`,
                                 }}
                             />
                         ) : (
@@ -82,20 +71,43 @@ const ProductCard = ({ product }: { product: Product }) => {
 
                     {/* Content Section */}
                     <div className="flex flex-1 flex-col">
-                        <div className="text-xs font-medium text-muted-foreground">
-                            Kompatibel: {product.compatibility}
+                        <div className="flex items-center gap-2">
+                            <p className="rounded-full bg-amber-100 px-2 text-xs text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+                                {product.category}
+                            </p>
+                            {/* <div className="text-xs font-medium text-muted-foreground">
+                                Kompatibel: {product.compatibility}
+                            </div> */}
                         </div>
                         <h3 className="line-clamp-2 min-h-[3.5rem] text-lg font-bold transition-colors group-hover:text-blue-600">
                             {product.name}
                         </h3>
                         <div className="mt-auto flex items-center justify-between pt-2">
-                            <span
-                                className={`text-xl font-bold ${isOutOfStock ? 'text-muted-foreground' : 'text-blue-600'}`}
-                            >
-                                {formatPrice(product.price)}
-                            </span>
+                            <div className="flex items-center gap-1">
+                                {product.price > 0 ? (
+                                    <>
+                                        <span className="text-xs font-medium text-muted-foreground line-through">
+                                            {formatPrice(
+                                                product.original_price,
+                                            )}
+                                        </span>
+                                        <span
+                                            className={`text-xl font-bold ${isOutOfStock ? 'text-muted-foreground' : 'text-blue-600'}`}
+                                        >
+                                            {formatPrice(product.price)}
+                                        </span>
+                                    </>
+                                ) : (
+                                    <span
+                                        className={`text-xl font-bold ${isOutOfStock ? 'text-muted-foreground' : 'text-blue-600'}`}
+                                    >
+                                        {formatPrice(product.original_price)}
+                                    </span>
+                                )}
+                            </div>
+
                             <button
-                                disabled
+                                disabled={isOutOfStock}
                                 onClick={(e) => e.preventDefault()}
                                 className={`h-8 w-8 items-center justify-center rounded-full transition-colors ${
                                     isOutOfStock
