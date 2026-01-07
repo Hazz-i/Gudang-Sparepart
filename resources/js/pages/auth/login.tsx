@@ -118,7 +118,7 @@ export default function Login({ status }: LoginProps) {
                             {/* Submit Button */}
                             <Button
                                 type="submit"
-                                className="flex w-full justify-center rounded-lg bg-blue-600 px-3 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                                className="flex w-full justify-center rounded-lg bg-blue-600 px-3 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-blue-700 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"
