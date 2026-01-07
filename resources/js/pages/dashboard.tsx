@@ -213,7 +213,7 @@ export default function Dashboard() {
                                     Peringatan Stok Menipis
                                 </h2>
                                 <Link
-                                    href="/admin/stock"
+                                    href="/stock"
                                     className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400"
                                 >
                                     Lihat Semua

@@ -36,21 +36,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
+    
+    Route::get('/stock', [ProductController::class, 'index'])->name('stock.index');
+    Route::post('/stock', [ProductController::class, 'store'])->name('stock.store');
+    Route::put('/stock/{product}', [ProductController::class, 'update'])->name('stock.update');
+    Route::post('/stock/{product}', [ProductController::class, 'update'])->name('stock.update.post'); // For file upload with method spoofing
+    Route::delete('/stock/{product}', [ProductController::class, 'destroy'])->name('stock.destroy');
 
-    // Admin routes
-    Route::prefix('admin')->name('admin.')->group(function () {
-        Route::get('/stock', function () {
-            return Inertia::render('admin/stock/index');
-        })->name('stock.index');
+    Route::get('/orders', function () {
+        return Inertia::render('admin/orders/index');
+    })->name('orders.index');
 
-        Route::get('/orders', function () {
-            return Inertia::render('admin/orders/index');
-        })->name('orders.index');
-
-        Route::get('/settings', function () {
-            return Inertia::render('admin/settings/index');
-        })->name('settings.index');
-    });
+    Route::get('/settings', function () {
+        return Inertia::render('admin/settings/index');
+    })->name('settings.index');
 });
 
 require __DIR__.'/settings.php';

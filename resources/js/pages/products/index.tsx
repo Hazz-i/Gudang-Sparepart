@@ -13,35 +13,17 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from '@/components/ui/pagination';
-import { type Product, type SharedData } from '@/types';
+import { type Product, type SharedData, type AllProduct, type Filters } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
 import { FilterIcon, SearchIcon } from 'lucide-react';
 import { useState } from 'react';
 
-type AllProduct = {
-    current_page: number;
-    data: Product[];
-    first_page_url: string;
-    from: number;
-    last_page: number;
-    last_page_url: string;
-    links: Array<any>;
-    next_page_url: string | null;
-};
-
-type Filters = {
-    category?: string;
-    brand?: string;
-    status?: string;
-    search?: string;
-};
 
 export default function ProductsIndex() {
-    const { auth, products, categories, brands, filters } = usePage<{
+    const { auth, products, categories, filters } = usePage<{
         auth: SharedData['auth'];
         products: AllProduct;
         categories: string[];
-        brands: string[];
         filters: Filters;
     }>().props;
 

@@ -58,3 +58,26 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+
+export interface AllProduct {
+    current_page: number;
+    data: Product[];
+    first_page_url: string;
+    from: number;
+    to: number;
+    total: number;
+    per_page: number;
+    last_page: number;
+    last_page_url: string;
+    links: Array<any>;
+    next_page_url: string | null;
+    prev_page_url: string | null;
+};
+
+export interface Filters {
+    category?: string;
+    brand?: string;
+    status?: string;
+    search?: string;
+};

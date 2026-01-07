@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -40,7 +41,7 @@ class ProductController extends Controller
         $categories = Product::distinct()->pluck('category')->filter()->values();
         $brands = Product::distinct()->pluck('brand')->filter()->values();
 
-        return inertia('products/index', [
+        return inertia('admin/stock/index', [
             'products' => $products,
             'categories' => $categories,
             'brands' => $brands,
@@ -49,19 +50,47 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'original_price' => 'nullable|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'brand' => 'nullable|string|max:255',
+            'material' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'warranty' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+
+        // Determine status based on stock
+        $stock = (int) $validated['stock'];
+        if ($stock === 0) {
+            $validated['status'] = 'out_of_stock';
+        } elseif ($stock <= 10) {
+            $validated['status'] = 'low_stock';
+        } else {
+            $validated['status'] = 'in_stock';
+        }
+
+        // Set original_price if not provided
+        if (!isset($validated['original_price']) || !$validated['original_price']) {
+            $validated['original_price'] = $validated['price'];
+        }
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+            $validated['image_url'] = '/storage/' . $path;
+        }
+
+        Product::create($validated);
+
+        return redirect()->route('admin.stock.index')->with('success', 'Produk berhasil ditambahkan!');
     }
 
     /**
@@ -83,19 +112,53 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'original_price' => 'nullable|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'brand' => 'nullable|string|max:255',
+            'material' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'warranty' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+
+        // Determine status based on stock
+        $stock = (int) $validated['stock'];
+        if ($stock === 0) {
+            $validated['status'] = 'out_of_stock';
+        } elseif ($stock <= 10) {
+            $validated['status'] = 'low_stock';
+        } else {
+            $validated['status'] = 'in_stock';
+        }
+
+        // Set original_price if not provided
+        if (!isset($validated['original_price']) || !$validated['original_price']) {
+            $validated['original_price'] = $validated['price'];
+        }
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($product->image_url && str_starts_with($product->image_url, '/storage/')) {
+                $oldPath = str_replace('/storage/', '', $product->image_url);
+                Storage::disk('public')->delete($oldPath);
+            }
+            
+            $path = $request->file('image')->store('products', 'public');
+            $validated['image_url'] = '/storage/' . $path;
+        }
+
+        $product->update($validated);
+
+        return redirect()->route('admin.stock.index')->with('success', 'Produk berhasil diperbarui!');
     }
 
     /**
@@ -103,6 +166,14 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        // Delete image if exists
+        if ($product->image_url && str_starts_with($product->image_url, '/storage/')) {
+            $oldPath = str_replace('/storage/', '', $product->image_url);
+            Storage::disk('public')->delete($oldPath);
+        }
+
+        $product->delete();
+
+        return redirect()->route('admin.stock.index')->with('success', 'Produk berhasil dihapus!');
     }
 }

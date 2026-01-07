@@ -15,7 +15,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
     {
         title: 'Pengaturan',
-        href: '/admin/settings',
+        href: '/settings',
     },
 ];
 

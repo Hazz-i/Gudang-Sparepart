@@ -13,7 +13,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
     {
         title: 'Daftar Pesanan',
-        href: '/admin/orders',
+        href: '/orders',
     },
 ];
 

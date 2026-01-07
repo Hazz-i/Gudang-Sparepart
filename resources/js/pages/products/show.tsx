@@ -189,6 +189,11 @@ export default function ProductShow() {
                             <h2 className="mb-4 lg:mb-8 text-2xl font-bold">
                                 Produk Rekomendasi
                             </h2>
+                            {recommendedProducts.length < 1 && (
+                                <span className='flex items-center justify-center h-12'>
+                                    <p>Belum ada produk serupa</p>
+                                </span>
+                            )}
                             <div className={`grid ${recommendedProducts.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-2 lg:gap-6 md:grid-cols-4`}>
                                 {recommendedProducts.map(
                                     (relatedProduct: any) => (

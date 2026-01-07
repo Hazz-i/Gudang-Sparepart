@@ -31,17 +31,17 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Stok Barang',
-        href: '/admin/stock',
+        href: '/stock',
         icon: Package,
     },
     {
         title: 'Pesanan',
-        href: '/admin/orders',
+        href: '/orders',
         icon: ShoppingCart,
     },
     {
         title: 'Pengaturan',
-        href: '/admin/settings',
+        href: '/settings',
         icon: Settings,
     },
 ];
@@ -66,9 +66,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
-                                <AppLogo />
-                            </Link>
+                            <AppLogo />
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>

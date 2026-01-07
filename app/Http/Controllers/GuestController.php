@@ -10,7 +10,7 @@ class GuestController extends Controller
 {
     public function index()
     {
-        $products = Product::where('status', 'in_stock')->limit(8)->get();
+        $products = Product::where('status', 'in_stock')->limit(8)->orderBy('created_at', 'desc')->get();
         return inertia('welcome', [
             'products' => $products,
         ]);
