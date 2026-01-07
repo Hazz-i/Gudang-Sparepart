@@ -9,11 +9,13 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import {
     ArrowRightIcon,
     CircleIcon,
+    ClipboardCheckIcon,
     CogIcon,
+    CreditCardIcon,
     DiscIcon,
     DropletIcon,
-    MessagesSquareIcon,
-    PackageIcon,
+    PackageSearchIcon,
+    SearchIcon,
     StoreIcon,
 } from 'lucide-react';
 
@@ -49,33 +51,32 @@ const categories = [
     },
 ];
 
-// Data langkah-langkah
+// Data langkah-langkah booking
 const steps = [
     {
-        icon: MessagesSquareIcon,
-        title: '1. Tanya Chatbot',
+        icon: PackageSearchIcon,
+        title: '1. Pilih Produk',
         description:
-            'Ketik nama sparepart yang Anda butuhkan di widget chat. AI kami memahami model spesifik maupun istilah umum.',
+            'Cari sparepart yang Anda butuhkan melalui katalog atau chatbot AI kami. Lihat detail harga, stok, dan spesifikasi produk.',
     },
     {
-        icon: PackageIcon,
-        title: '2. Konfirmasi Stok',
+        icon: CreditCardIcon,
+        title: '2. Pilih Pembayaran',
         description:
-            'Bot kami mengecek inventaris secara real-time di semua gudang dan toko yang terhubung.',
+            'Pilih metode pembayaran: Transfer Bank, E-Wallet (GoPay, OVO, Dana).',
+    },
+    {
+        icon: ClipboardCheckIcon,
+        title: '3. Konfirmasi & Booking',
+        description:
+            'Setelah pembayaran dikonfirmasi, Anda akan menerima nomor booking via email. Simpan kode ini dengan baik.',
     },
     {
         icon: StoreIcon,
-        title: '3. Pesan & Ambil',
+        title: '4. Ambil di Toko',
         description:
-            'Reservasi barang Anda segera dan dapatkan kode booking untuk mengambilnya di toko tanpa antri.',
+            'Kunjungi toko kami dengan menunjukkan nomor booking. Batas pengambilan 7 hari setelah konfirmasi.',
     },
-];
-
-// Avatar pengguna untuk indikator kepercayaan
-const userAvatars = [
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuBEKl6Aubzx0PvOTPybZvlrVKaCFdjWDL_y2yFaopftI-kR9z7aBldVXYV0-6g8WeTnJH5RCJVv9Hz_A9rgSGFkgScjIWj24-VXnUrfovHLUFEOnPR8doijtZn6hHx-NcxQoMqFh8GfsgofySSq_hS48A02fIJUfuIcqhMDhP5jJ9LYL_l9DoGV9QQJanME1MEViOzwqa8NZZIEJtW5cA7hTnMEiQ9Q-AbgVWsiF8ImP95TnIgGaMq1bkd7U0h_2mbV2VSGEhZXtUs',
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuAFhg_RxaCQlaiZ-MH_vfmMYASnh0OkPJL6qBG5xYN8uCuBgvxl0WbE0pQ7MM5pb-7VD1GfO78e5JAwBe1VxFgQJWYOsYPm2Bix_yDxl_UYMBetd_DKY85nknMzwUjDeJoXVwsp4ewMroIV69g23GIjn80MeOxyaz6zpwCwzGX_0kt_NN-SLVeFagNr3mliaYKxnW3bfZsGB4S6qPUPpcv0WC_bExGyVfLzDaKavegXs5k-r2EL-VwpXeO5nlFudYKktJnThNQOz94',
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuBSmtFBELKZum6JPbYF3BzcZusn6z-h0LD022XnbIeyzKKXqzvlLBDFRyNwiI-Aje_wJbbEuFL0THV1QO_zei8QQA9oJqh_eZ7u-HyytRnuigDnwJW-rrk5aR8k69LgKEvb-gsZIrfxQXCX6U1gRlbHdbeNnYG2YTCMmPrSBr8EATggRqpytTEjXhQR0DNXU0HBWzVayslKbG0k3ymTHxy7jndzTURPTGm43lakCAz7ssjy6awPA0v5oIhC6QghkNJkyIWXS4SDhTw',
 ];
 
 export default function Welcome() {
@@ -97,17 +98,17 @@ export default function Welcome() {
                             <div className="order-2 flex flex-col gap-6 lg:order-1">
                                 <div className="flex flex-col gap-4 text-left">
                                     <h1 className="text-4xl leading-[1.1] font-black tracking-tighter sm:text-5xl lg:text-6xl">
-                                        Temukan & Pesan Instan{' '}
+                                        Booking Online,{' '}
                                         <span className="text-blue-600">
-                                            Sparepart Motor
+                                            Ambil di Toko
                                         </span>
                                     </h1>
 
                                     <p className="max-w-xl text-lg leading-relaxed font-normal text-muted-foreground">
-                                        Lewati antrian toko. Cukup chat dengan
-                                        asisten cerdas kami untuk mengecek
-                                        ketersediaan stok secara real-time dan
-                                        pesan sparepart dalam hitungan detik.
+                                        Pesan sparepart motor secara online dan
+                                        ambil langsung di toko tanpa antri. Cek
+                                        ketersediaan stok real-time via chatbot
+                                        AI kami.
                                     </p>
                                 </div>
 
@@ -117,25 +118,9 @@ export default function Welcome() {
                                             size="lg"
                                             className="h-12 rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/25 hover:bg-blue-700"
                                         >
-                                            Lihat Katalog
+                                            Lihat Sparepart
                                         </Button>
                                     </Link>
-                                </div>
-
-                                {/* Trust indicators */}
-                                <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
-                                    <div className="flex -space-x-2">
-                                        {userAvatars.map((avatar, index) => (
-                                            <div
-                                                key={index}
-                                                className="h-8 w-8 rounded-full border-2 border-background bg-muted bg-cover"
-                                                style={{
-                                                    backgroundImage: `url('${avatar}')`,
-                                                }}
-                                            />
-                                        ))}
-                                    </div>
-                                    <p>Dipercaya oleh 2.000+ pengendara</p>
                                 </div>
                             </div>
 
@@ -185,15 +170,16 @@ export default function Welcome() {
                         <div className="flex flex-col gap-10">
                             <div className="flex flex-col gap-4 text-center md:text-left">
                                 <h2 className="text-[32px] leading-tight font-black tracking-tight sm:text-4xl">
-                                    Cara Kerja
+                                    Cara Booking Sparepart
                                 </h2>
                                 <p className="max-w-[720px] text-lg text-muted-foreground">
-                                    Dapatkan sparepart Anda dalam 3 langkah
-                                    mudah tanpa keluar rumah.
+                                    Dapatkan sparepart Anda dalam 4 langkah
+                                    mudah. Reservasi online, ambil di toko tanpa
+                                    antri.
                                 </p>
                             </div>
 
-                            <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+                            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
                                 {steps.map((step, index) => (
                                     <Card
                                         key={index}
@@ -216,6 +202,85 @@ export default function Welcome() {
                                 ))}
                             </div>
                         </div>
+                    </div>
+                </section>
+
+                {/* Cek Status Booking Section */}
+                <section className="pt-5 pb-16">
+                    <div className="mx-auto max-w-[1280px] px-4">
+                        <Card className="overflow-hidden border-0 bg-gradient-to-br from-blue-600 via-blue-600 to-blue-700 shadow-2xl shadow-blue-600/20">
+                            <CardContent className="p-0">
+                                <div className="grid gap-8 lg:grid-cols-2 lg:gap-0">
+                                    {/* Left Content */}
+                                    <div className="flex flex-col justify-center gap-6 p-8 lg:p-12">
+                                        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur">
+                                            <SearchIcon className="h-7 w-7 text-white" />
+                                        </div>
+                                        <div className="flex flex-col gap-3">
+                                            <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                                                Sudah Booking?
+                                            </h2>
+                                            <p className="max-w-md text-blue-100">
+                                                Lacak status pesanan Anda dengan
+                                                memasukkan nomor booking yang
+                                                dikirim via email.
+                                            </p>
+                                        </div>
+                                        <Link href="/booking-status">
+                                            <Button
+                                                size="lg"
+                                                className="h-12 w-fit rounded-xl bg-white px-6 font-semibold text-blue-600 shadow-lg transition-all hover:bg-blue-50 hover:shadow-xl"
+                                            >
+                                                <SearchIcon className="mr-2 h-5 w-5" />
+                                                Cek Status Booking
+                                            </Button>
+                                        </Link>
+                                    </div>
+
+                                    {/* Right Content - Status Legend */}
+                                    <div className="flex flex-col justify-center gap-4 bg-white/5 p-8 backdrop-blur lg:p-12">
+                                        <p className="text-sm font-medium text-blue-200">
+                                            STATUS BOOKING
+                                        </p>
+                                        <div className="flex flex-col gap-3">
+                                            <div className="flex items-center gap-3 rounded-lg bg-white/10 px-4 py-3">
+                                                <div className="h-3 w-3 rounded-full bg-yellow-400 shadow-lg shadow-yellow-400/50"></div>
+                                                <div>
+                                                    <p className="font-semibold text-white">
+                                                        PENDING
+                                                    </p>
+                                                    <p className="text-sm text-blue-200">
+                                                        Menunggu pembayaran
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-3 rounded-lg bg-white/10 px-4 py-3">
+                                                <div className="h-3 w-3 rounded-full bg-green-400 shadow-lg shadow-green-400/50"></div>
+                                                <div>
+                                                    <p className="font-semibold text-white">
+                                                        CONFIRMED
+                                                    </p>
+                                                    <p className="text-sm text-blue-200">
+                                                        Siap diambil di toko
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-3 rounded-lg bg-white/10 px-4 py-3">
+                                                <div className="h-3 w-3 rounded-full bg-blue-300 shadow-lg shadow-blue-300/50"></div>
+                                                <div>
+                                                    <p className="font-semibold text-white">
+                                                        COMPLETED
+                                                    </p>
+                                                    <p className="text-sm text-blue-200">
+                                                        Pesanan selesai
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
                     </div>
                 </section>
 

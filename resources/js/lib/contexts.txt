@@ -14,7 +14,6 @@ FLOW BOOKING SPAREPART:
    - Pilih metode pembayaran yang tersedia:
      * Transfer Bank (BCA, BNI, BRI, Mandiri)
      * E-Wallet (GoPay, OVO, Dana)
-     * COD (Bayar di Toko)
    - Isi data diri (nama, email, nomor telepon)
    - Konfirmasi pesanan
 
