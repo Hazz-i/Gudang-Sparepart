@@ -65,7 +65,7 @@ export default function BookingStatus() {
                         <div className="grid gap-8 lg:grid-cols-5 lg:gap-12">
                             {/* Left - Form Section */}
                             <div className="lg:col-span-3">
-                                <Card className="border-0 shadow-xl shadow-slate-200/50 dark:shadow-none">
+                                <Card className="border-0">
                                     <CardContent className="p-8 sm:p-10">
                                         {/* Header */}
                                         <div className="mb-8 flex flex-col gap-4">
