@@ -117,7 +117,7 @@ export default function Welcome() {
                                         <Button
                                             size="lg"
                                             className="h-12 rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/25 hover:bg-blue-700"
-                                        >
+                                    >
                                             Lihat Sparepart
                                         </Button>
                                     </Link>
