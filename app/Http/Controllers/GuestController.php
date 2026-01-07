@@ -40,7 +40,7 @@ class GuestController extends Controller
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
-        $products = $query->latest()->paginate(12);
+        $products = $query->latest()->paginate(16);
 
         // Get unique categories and brands for filters
         $categories = Product::distinct()->pluck('category')->filter()->values();
@@ -56,8 +56,15 @@ class GuestController extends Controller
 
     public function productShow(Product $product)
     {
+        $recommendedProducts = Product::where('category', $product->category)
+            ->where('id', '!=', $product->id)
+            ->inRandomOrder()
+            ->limit(4)
+            ->get();
+
         return inertia('products/show', [
             'product' => $product,
+            'recommendedProducts' => $recommendedProducts,
         ]);
     }   
 }

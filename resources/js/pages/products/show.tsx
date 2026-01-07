@@ -5,39 +5,41 @@ import ProductCard from '@/components/product-card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formatPrice } from '@/helper/functions';
-import { welcomeProducts } from '@/helper/product';
-import { type SharedData } from '@/types';
+import { type Product, type SharedData } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
-import { Share2, Verified } from 'lucide-react';
-
-// Data produk (contoh)
-const product = {
-    id: 1,
-    name: 'Kampas Rem Keramik X-Grip (Belakang)',
-    stock: 100,
-    category: 'Sistem Rem',
-    originalPrice: 185000,
-    price: 145000,
-    rating: 4.8,
-    reviewCount: 128,
-    status: 'in_stock',
-    isGenuine: true,
-    description:
-        'Direkayasa untuk daya pengereman superior dan minim debu. Kampas rem keramik ini menawarkan daya tahan yang sangat baik dan performa konsisten baik dalam kondisi basah maupun kering. Kompatibel dengan sebagian besar motor sport 250cc.',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAPREB0C-nwzck1ZkA7VvLDEa_SdSeTxhfR77XIPmzT7FGf5Y-H5JFI6DyU3LyOdKTd7IOYkkIGl5YGgbV8i6UkhR0oRE_kxULMY8NAHhzK27u1wextPPTCKEeGH5xkmLVetZpdEQlUteoOj0KGAHhD621RoYJqhH5aaEibKqGZ9sGl1QYQWf-IJPTGTjMGSrC6uZoWM6rrZ7wdr4Pu2c8yY2TAWmMsl9djvzswecuXXZHgb97XHi3Qk5OoqJVu2QaKZWgRpxsOlag',
-    specifications: [
-        { label: 'Merek', value: 'X-Grip Racing' },
-        { label: 'Material', value: 'Keramik Komposit' },
-        { label: 'Posisi', value: 'Belakang' },
-        { label: 'Kompatibilitas', value: 'CBR250RR, R25, Ninja 250' },
-        { label: 'Garansi', value: '6 Bulan' },
-        { label: 'Berat', value: '450g' },
-    ],
-};
+import { CheckIcon, Share2 } from 'lucide-react';
+import { useState } from 'react';
 
 export default function ProductShow() {
-    const { auth } = usePage<SharedData>().props;
+    const { auth, product, recommendedProducts } = usePage<{
+        auth: SharedData['auth'];
+        product: Product;
+        recommendedProducts: Product[];
+    }>().props;
 
+    const [copied, setCopied] = useState(false);
+
+    const handleShare = async () => {
+        const shareData = {
+            title: product.name,
+            text: `Cek sparepart ${product.name} di Gudang Sparepart - ${formatPrice(product.price)}`,
+            url: window.location.href,
+        };
+
+        // Check if Web Share API is available
+        if (navigator.share && navigator.canShare?.(shareData)) {
+            await navigator.share(shareData);
+        } else {
+            // Fallback: copy URL to clipboard
+            try {
+                await navigator.clipboard.writeText(window.location.href);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            } catch (error) {
+                console.error('Gagal menyalin ke clipboard:', error);
+            }
+        }
+    };
     return (
         <>
             <Head title={`${product.name} - Gudang Sparepart`} />
@@ -58,26 +60,26 @@ export default function ProductShow() {
                                     <div
                                         className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
                                         style={{
-                                            backgroundImage: `url('${product.image}')`,
+                                            backgroundImage: `url('${product.image_url}')`,
                                         }}
                                     >
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-40"></div>
                                     </div>
-                                    {product.isGenuine && (
+                                    {/* {product.is_genuine && (
                                         <div className="absolute top-4 left-4 z-10">
                                             <Badge className="gap-1 border bg-card/90 text-foreground backdrop-blur-sm">
                                                 <Verified className="h-4 w-4 text-blue-600" />
                                                 Produk Asli
                                             </Badge>
                                         </div>
-                                    )}
+                                    )} */}
                                 </div>
                             </div>
 
                             {/* Product Info */}
                             <div className="flex h-full flex-col">
                                 {/* Header Section */}
-                                <div className="flex flex-col gap-4 border-b pb-8">
+                                <div className="flex flex-grow flex-col gap-4 border-b pb-8">
                                     <div>
                                         <h1 className="mb-2 text-3xl font-black tracking-tight sm:text-4xl">
                                             {product.name}
@@ -94,7 +96,7 @@ export default function ProductShow() {
                                         <div className="flex items-baseline gap-2">
                                             <span className="text-base font-medium text-muted-foreground line-through">
                                                 {formatPrice(
-                                                    product.originalPrice,
+                                                    product.original_price,
                                                 )}
                                             </span>
                                             <span className="text-4xl font-bold text-blue-600">
@@ -107,32 +109,54 @@ export default function ProductShow() {
                                     </div>
 
                                     {/* Description */}
-                                    <p className="mt-2 text-base leading-relaxed text-muted-foreground">
-                                        {product.description}
-                                    </p>
+                                    <div className="mt-4 flex flex-grow flex-col items-start justify-end">
+                                        <h1 className="text-lg font-bold">
+                                            Deskripsi
+                                        </h1>
+                                        <p className="mt-2 text-base leading-relaxed text-muted-foreground">
+                                            {product.description}
+                                        </p>
+                                    </div>
                                 </div>
 
                                 {/* Specifications */}
-                                <div className="flex-grow py-8">
+                                <div className="flex flex-col justify-end py-8">
                                     <h3 className="mb-4 font-bold">
                                         Spesifikasi Produk
                                     </h3>
                                     <div className="grid grid-cols-1 gap-x-8 gap-y-4 text-sm sm:grid-cols-2">
-                                        {product.specifications.map(
-                                            (spec, index) => (
-                                                <div
-                                                    key={index}
-                                                    className="flex justify-between border-b pb-2"
-                                                >
-                                                    <span className="text-muted-foreground">
-                                                        {spec.label}
-                                                    </span>
-                                                    <span className="font-medium">
-                                                        {spec.value}
-                                                    </span>
-                                                </div>
-                                            ),
-                                        )}
+                                        <div className="flex justify-between border-b pb-2">
+                                            <span className="text-muted-foreground">
+                                                Garansi
+                                            </span>
+                                            <span className="font-medium">
+                                                {product.warranty}
+                                            </span>
+                                        </div>
+                                        <div className="flex justify-between border-b pb-2">
+                                            <span className="text-muted-foreground">
+                                                Kategori
+                                            </span>
+                                            <span className="font-medium">
+                                                {product.category}
+                                            </span>
+                                        </div>
+                                        <div className="flex justify-between border-b pb-2">
+                                            <span className="text-muted-foreground">
+                                                Material
+                                            </span>
+                                            <span className="font-medium">
+                                                {product.material}
+                                            </span>
+                                        </div>
+                                        <div className="flex justify-between border-b pb-2">
+                                            <span className="text-muted-foreground">
+                                                Merek
+                                            </span>
+                                            <span className="font-medium">
+                                                {product.brand}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -142,34 +166,46 @@ export default function ProductShow() {
                                     <div className="flex gap-4">
                                         <Button
                                             size="lg"
-                                            className="h-14 flex-1 rounded-xl bg-green-600 text-lg font-bold text-white shadow-lg shadow-green-600/25 transition-all hover:-translate-y-0.5 hover:bg-green-700"
+                                            className="h-14 flex-1 rounded-xl bg-blue-600 text-lg font-bold text-white shadow-lg shadow-blue-600/25 transition-all hover:-translate-y-0.5 hover:bg-blue-700"
                                         >
-                                            Booking via Chat
+                                            Booking Sekarang
                                         </Button>
                                         <Button
                                             size="lg"
                                             variant="outline"
                                             className="h-14 w-14 rounded-xl"
+                                            onClick={handleShare}
+                                            title={
+                                                copied
+                                                    ? 'Link disalin!'
+                                                    : 'Bagikan'
+                                            }
                                         >
-                                            <Share2 className="h-5 w-5" />
+                                            {copied ? (
+                                                <CheckIcon className="h-5 w-5 text-green-600" />
+                                            ) : (
+                                                <Share2 className="h-5 w-5" />
+                                            )}
                                         </Button>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Related Products */}
+                        {/* Rekomendasi Produk */}
                         <div className="border-t py-12">
                             <h2 className="mb-8 text-2xl font-bold">
-                                Produk Terkait
+                                Produk Rekomendasi
                             </h2>
                             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4">
-                                {welcomeProducts.map((relatedProduct) => (
-                                    <ProductCard
-                                        key={relatedProduct.id}
-                                        product={relatedProduct}
-                                    />
-                                ))}
+                                {recommendedProducts.map(
+                                    (relatedProduct: any) => (
+                                        <ProductCard
+                                            key={relatedProduct.id}
+                                            product={relatedProduct}
+                                        />
+                                    ),
+                                )}
                             </div>
                         </div>
                     </div>
