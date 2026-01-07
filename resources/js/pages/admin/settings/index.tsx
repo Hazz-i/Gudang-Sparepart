@@ -1,17 +1,29 @@
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
-import { Bell, Lock, MessageSquare, Save, Store, User } from 'lucide-react';
+import { type BreadcrumbItem, type SharedData } from '@/types';
+import { Head, useForm, usePage } from '@inertiajs/react';
+import { Loader2, Mail } from 'lucide-react';
 import { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Admin Panel',
-        href: '/admin',
+        href: '/dashboard',
     },
     {
         title: 'Pengaturan',
@@ -20,322 +32,249 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function SettingsPage() {
-    const [activeTab, setActiveTab] = useState('store');
+    const { auth } = usePage<{ auth: SharedData['auth'] }>().props;
+    const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
-    const tabs = [
-        { id: 'store', label: 'Toko', icon: Store },
-        { id: 'account', label: 'Akun', icon: User },
-        { id: 'notifications', label: 'Notifikasi', icon: Bell },
-        { id: 'chatbot', label: 'Chatbot', icon: MessageSquare },
-    ];
+    // Combined form for profile and password
+    const form = useForm({
+        first_name: auth.user?.name?.split(' ')[0] || '',
+        last_name: auth.user?.name?.split(' ').slice(1).join(' ') || '',
+        email: auth.user?.email || '',
+        phone: '',
+        current_password: '',
+        new_password: '',
+        new_password_confirmation: '',
+    });
+
+    const handleConfirmSave = () => {
+        setShowConfirmDialog(false);
+        form.put('/settings/profile', {
+            onSuccess: () => {
+                form.setData({
+                    ...form.data,
+                    current_password: '',
+                    new_password: '',
+                    new_password_confirmation: '',
+                });
+                toast.success('Pengaturan berhasil disimpan!', {
+                    duration: 4000,
+                    position: 'top-right',
+                });
+            },
+            onError: () => {
+                toast.error('Gagal menyimpan. Periksa kembali data Anda.', {
+                    duration: 4000,
+                    position: 'top-right',
+                });
+            },
+        });
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setShowConfirmDialog(true);
+    };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Pengaturan - Admin" />
 
             <div className="flex-1 overflow-y-auto p-4 md:p-8">
-                <div className="mx-auto max-w-4xl space-y-6">
-                    {/* Page Heading */}
-                    <div>
-                        <h1 className="text-2xl font-bold text-slate-900 md:text-3xl dark:text-white">
-                            Pengaturan
-                        </h1>
-                        <p className="mt-1 text-slate-500 dark:text-slate-400">
-                            Kelola pengaturan toko dan akun Anda.
-                        </p>
+                <div className="mx-auto max-w-4xl space-y-8">
+                    {/* Profile Card */}
+                    <div className="flex flex-col items-center text-center">
+                        <div className="relative mb-4 h-24 w-24">
+                            <img
+                                alt="Profile"
+                                className="h-full w-full rounded-full object-cover ring-4 ring-slate-50 dark:ring-slate-800"
+                                src={`https://ui-avatars.com/api/?name=${encodeURIComponent(auth.user?.name || 'Admin')}&background=3b82f6&color=fff&size=96`}
+                            />
+                        </div>
+                        <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                            {auth.user?.name || 'Admin User'}
+                        </h3>
+                        <span className="text-sm text-slate-500 dark:text-slate-400">
+                            Super Administrator
+                        </span>
                     </div>
 
-                    <div className="flex flex-col gap-6 lg:flex-row">
-                        {/* Sidebar Tabs */}
-                        <div className="w-full lg:w-64">
-                            <nav className="flex flex-row gap-1 overflow-x-auto lg:flex-col">
-                                {tabs.map((tab) => (
-                                    <button
-                                        key={tab.id}
-                                        onClick={() => setActiveTab(tab.id)}
-                                        className={`flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
-                                            activeTab === tab.id
-                                                ? 'bg-blue-600 text-white shadow-md'
-                                                : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800'
-                                        }`}
+                    {/* Settings Form - Single Card */}
+                    <Card>
+                        <div className="border-b border-slate-200 px-6 py-4 dark:border-slate-800">
+                            <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                                Pengaturan Akun
+                            </h2>
+                            <p className="text-sm text-slate-500 dark:text-slate-400">
+                                Perbarui informasi pribadi dan password Anda.
+                            </p>
+                        </div>
+                        <CardContent className="p-6">
+                            <form onSubmit={handleSubmit}>
+                                {/* Profile Section */}
+                                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                    <div className="col-span-1">
+                                        <Label htmlFor="first-name">Nama Depan</Label>
+                                        <Input
+                                            id="first-name"
+                                            className="mt-1"
+                                            value={form.data.first_name}
+                                            onChange={(e) => form.setData('first_name', e.target.value)}
+                                        />
+                                        {form.errors.first_name && (
+                                            <p className="mt-1 text-sm text-red-500">{form.errors.first_name}</p>
+                                        )}
+                                    </div>
+                                    <div className="col-span-1">
+                                        <Label htmlFor="last-name">Nama Belakang</Label>
+                                        <Input
+                                            id="last-name"
+                                            className="mt-1"
+                                            value={form.data.last_name}
+                                            onChange={(e) => form.setData('last_name', e.target.value)}
+                                        />
+                                        {form.errors.last_name && (
+                                            <p className="mt-1 text-sm text-red-500">{form.errors.last_name}</p>
+                                        )}
+                                    </div>
+                                    <div className="col-span-1 md:col-span-2">
+                                        <Label htmlFor="email">Email Address</Label>
+                                        <div className="relative mt-1">
+                                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                                <Mail className="h-5 w-5 text-slate-400" />
+                                            </div>
+                                            <Input
+                                                id="email"
+                                                type="email"
+                                                className="pl-10"
+                                                value={form.data.email}
+                                                onChange={(e) => form.setData('email', e.target.value)}
+                                            />
+                                        </div>
+                                        {form.errors.email && (
+                                            <p className="mt-1 text-sm text-red-500">{form.errors.email}</p>
+                                        )}
+                                    </div>
+                                    <div className="col-span-1 md:col-span-2">
+                                        <Label htmlFor="phone">Nomor Telepon</Label>
+                                        <Input
+                                            id="phone"
+                                            className="mt-1"
+                                            value={form.data.phone}
+                                            onChange={(e) => form.setData('phone', e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Password Section */}
+                                <Separator className="my-6" />
+                                <div className="mb-4">
+                                    <h3 className="text-md font-semibold text-slate-900 dark:text-white">
+                                        Ubah Password
+                                    </h3>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                                        Kosongkan jika tidak ingin mengubah password.
+                                    </p>
+                                </div>
+                                <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                                    <div>
+                                        <Label htmlFor="current-password">Password Saat Ini</Label>
+                                        <Input
+                                            id="current-password"
+                                            type="password"
+                                            className="mt-1"
+                                            value={form.data.current_password}
+                                            onChange={(e) => form.setData('current_password', e.target.value)}
+                                        />
+                                        {form.errors.current_password && (
+                                            <p className="mt-1 text-sm text-red-500">{form.errors.current_password}</p>
+                                        )}
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="new-password">Password Baru</Label>
+                                        <Input
+                                            id="new-password"
+                                            type="password"
+                                            className="mt-1"
+                                            value={form.data.new_password}
+                                            onChange={(e) => form.setData('new_password', e.target.value)}
+                                        />
+                                        {form.errors.new_password && (
+                                            <p className="mt-1 text-sm text-red-500">{form.errors.new_password}</p>
+                                        )}
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="confirm-password">Konfirmasi Password</Label>
+                                        <Input
+                                            id="confirm-password"
+                                            type="password"
+                                            className="mt-1"
+                                            value={form.data.new_password_confirmation}
+                                            onChange={(e) => form.setData('new_password_confirmation', e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Submit Button */}
+                                <div className="mt-6 flex justify-end">
+                                    <Button 
+                                        type="submit" 
+                                        className="bg-blue-600 hover:bg-blue-700"
+                                        disabled={form.processing}
                                     >
-                                        <tab.icon className="h-5 w-5" />
-                                        {tab.label}
-                                    </button>
-                                ))}
-                            </nav>
-                        </div>
-
-                        {/* Content */}
-                        <div className="flex-1 rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-                            {activeTab === 'store' && (
-                                <div className="space-y-6">
-                                    <div>
-                                        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
-                                            Informasi Toko
-                                        </h2>
-                                        <p className="text-sm text-slate-500 dark:text-slate-400">
-                                            Pengaturan umum untuk toko Anda.
-                                        </p>
-                                    </div>
-                                    <Separator />
-                                    <div className="grid gap-4">
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="storeName">
-                                                Nama Toko
-                                            </Label>
-                                            <Input
-                                                id="storeName"
-                                                defaultValue="Gudang Sparepart"
-                                            />
-                                        </div>
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="storeAddress">
-                                                Alamat
-                                            </Label>
-                                            <Input
-                                                id="storeAddress"
-                                                defaultValue="Jl. Otomotif No. 123, Jakarta"
-                                            />
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div className="grid gap-2">
-                                                <Label htmlFor="storePhone">
-                                                    Telepon
-                                                </Label>
-                                                <Input
-                                                    id="storePhone"
-                                                    defaultValue="021-12345678"
-                                                />
-                                            </div>
-                                            <div className="grid gap-2">
-                                                <Label htmlFor="storeWhatsapp">
-                                                    WhatsApp
-                                                </Label>
-                                                <Input
-                                                    id="storeWhatsapp"
-                                                    defaultValue="08123456789"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="storeEmail">
-                                                Email
-                                            </Label>
-                                            <Input
-                                                id="storeEmail"
-                                                type="email"
-                                                defaultValue="info@gudangsparepart.com"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="flex justify-end">
-                                        <Button className="flex items-center gap-2">
-                                            <Save className="h-4 w-4" />
-                                            Simpan Perubahan
-                                        </Button>
-                                    </div>
+                                        {form.processing ? (
+                                            <>
+                                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                Menyimpan...
+                                            </>
+                                        ) : (
+                                            'Simpan Perubahan'
+                                        )}
+                                    </Button>
                                 </div>
-                            )}
-
-                            {activeTab === 'account' && (
-                                <div className="space-y-6">
-                                    <div>
-                                        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
-                                            Pengaturan Akun
-                                        </h2>
-                                        <p className="text-sm text-slate-500 dark:text-slate-400">
-                                            Kelola informasi akun dan keamanan.
-                                        </p>
-                                    </div>
-                                    <Separator />
-                                    <div className="grid gap-4">
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="userName">
-                                                Nama Lengkap
-                                            </Label>
-                                            <Input
-                                                id="userName"
-                                                defaultValue="Admin User"
-                                            />
-                                        </div>
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="userEmail">
-                                                Email
-                                            </Label>
-                                            <Input
-                                                id="userEmail"
-                                                type="email"
-                                                defaultValue="admin@gudangsparepart.com"
-                                            />
-                                        </div>
-                                        <Separator />
-                                        <div>
-                                            <h3 className="mb-4 flex items-center gap-2 text-sm font-medium text-slate-900 dark:text-white">
-                                                <Lock className="h-4 w-4" />
-                                                Ubah Password
-                                            </h3>
-                                            <div className="grid gap-4">
-                                                <div className="grid gap-2">
-                                                    <Label htmlFor="currentPassword">
-                                                        Password Saat Ini
-                                                    </Label>
-                                                    <Input
-                                                        id="currentPassword"
-                                                        type="password"
-                                                    />
-                                                </div>
-                                                <div className="grid gap-2">
-                                                    <Label htmlFor="newPassword">
-                                                        Password Baru
-                                                    </Label>
-                                                    <Input
-                                                        id="newPassword"
-                                                        type="password"
-                                                    />
-                                                </div>
-                                                <div className="grid gap-2">
-                                                    <Label htmlFor="confirmPassword">
-                                                        Konfirmasi Password
-                                                    </Label>
-                                                    <Input
-                                                        id="confirmPassword"
-                                                        type="password"
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="flex justify-end">
-                                        <Button className="flex items-center gap-2">
-                                            <Save className="h-4 w-4" />
-                                            Simpan Perubahan
-                                        </Button>
-                                    </div>
-                                </div>
-                            )}
-
-                            {activeTab === 'notifications' && (
-                                <div className="space-y-6">
-                                    <div>
-                                        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
-                                            Pengaturan Notifikasi
-                                        </h2>
-                                        <p className="text-sm text-slate-500 dark:text-slate-400">
-                                            Atur bagaimana Anda menerima
-                                            notifikasi.
-                                        </p>
-                                    </div>
-                                    <Separator />
-                                    <div className="space-y-4">
-                                        {[
-                                            {
-                                                label: 'Pesanan Baru',
-                                                desc: 'Notifikasi saat ada pesanan baru masuk',
-                                            },
-                                            {
-                                                label: 'Stok Menipis',
-                                                desc: 'Peringatan saat stok barang hampir habis',
-                                            },
-                                            {
-                                                label: 'Pembayaran Masuk',
-                                                desc: 'Notifikasi saat pembayaran diterima',
-                                            },
-                                            {
-                                                label: 'Laporan Mingguan',
-                                                desc: 'Ringkasan penjualan setiap minggu',
-                                            },
-                                        ].map((item, idx) => (
-                                            <div
-                                                key={idx}
-                                                className="flex items-center justify-between rounded-lg border border-slate-200 p-4 dark:border-slate-700"
-                                            >
-                                                <div>
-                                                    <p className="font-medium text-slate-900 dark:text-white">
-                                                        {item.label}
-                                                    </p>
-                                                    <p className="text-sm text-slate-500 dark:text-slate-400">
-                                                        {item.desc}
-                                                    </p>
-                                                </div>
-                                                <label className="relative inline-flex cursor-pointer items-center">
-                                                    <input
-                                                        type="checkbox"
-                                                        className="peer sr-only"
-                                                        defaultChecked
-                                                    />
-                                                    <div className="peer h-6 w-11 rounded-full bg-slate-200 peer-checked:bg-blue-600 peer-focus:outline-none after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-slate-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white dark:bg-slate-700"></div>
-                                                </label>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div className="flex justify-end">
-                                        <Button className="flex items-center gap-2">
-                                            <Save className="h-4 w-4" />
-                                            Simpan Perubahan
-                                        </Button>
-                                    </div>
-                                </div>
-                            )}
-
-                            {activeTab === 'chatbot' && (
-                                <div className="space-y-6">
-                                    <div>
-                                        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
-                                            Pengaturan Chatbot
-                                        </h2>
-                                        <p className="text-sm text-slate-500 dark:text-slate-400">
-                                            Konfigurasi integrasi chatbot
-                                            WhatsApp.
-                                        </p>
-                                    </div>
-                                    <Separator />
-                                    <div className="grid gap-4">
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="whatsappApiKey">
-                                                API Key WhatsApp
-                                            </Label>
-                                            <Input
-                                                id="whatsappApiKey"
-                                                type="password"
-                                                placeholder="Masukkan API Key"
-                                            />
-                                        </div>
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="webhookUrl">
-                                                Webhook URL
-                                            </Label>
-                                            <Input
-                                                id="webhookUrl"
-                                                defaultValue="https://gudangsparepart.com/api/webhook"
-                                                readOnly
-                                                className="bg-slate-50 dark:bg-slate-800"
-                                            />
-                                        </div>
-                                        <div className="grid gap-2">
-                                            <Label htmlFor="greeting">
-                                                Pesan Sambutan
-                                            </Label>
-                                            <textarea
-                                                id="greeting"
-                                                rows={3}
-                                                className="w-full rounded-md border border-slate-200 bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-slate-400 focus-visible:ring-1 focus-visible:ring-blue-600 focus-visible:outline-none dark:border-slate-700"
-                                                defaultValue="Halo! Selamat datang di Gudang Sparepart. Ada yang bisa kami bantu?"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="flex justify-end">
-                                        <Button className="flex items-center gap-2">
-                                            <Save className="h-4 w-4" />
-                                            Simpan Perubahan
-                                        </Button>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </div>
+                            </form>
+                        </CardContent>
+                    </Card>
                 </div>
             </div>
+
+            {/* Confirmation Dialog */}
+            <AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Konfirmasi Simpan</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Apakah Anda yakin ingin menyimpan perubahan pengaturan akun ini?
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Batal</AlertDialogCancel>
+                        <AlertDialogAction 
+                            onClick={handleConfirmSave}
+                            className="bg-blue-600 hover:bg-blue-700"
+                        >
+                            Ya, Simpan
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
+            {/* Toast Notifications */}
+            <Toaster
+                toastOptions={{
+                    success: {
+                        style: {
+                            background: '#10B981',
+                            color: '#fff',
+                        },
+                    },
+                    error: {
+                        style: {
+                            background: '#EF4444',
+                            color: '#fff',
+                        },
+                    },
+                }}
+            />
         </AppLayout>
     );
 }

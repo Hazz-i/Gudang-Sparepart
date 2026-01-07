@@ -7,6 +7,7 @@ use Laravel\Fortify\Features;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\SettingsController;
 
 
 // GUEST ROUTES
@@ -47,9 +48,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('admin/orders/index');
     })->name('orders.index');
 
-    Route::get('/settings', function () {
-        return Inertia::render('admin/settings/index');
-    })->name('settings.index');
+    // Settings routes
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+    Route::put('/settings/profile', [SettingsController::class, 'updateProfile'])->name('settings.profile.update');
+    Route::put('/settings/password', [SettingsController::class, 'updatePassword'])->name('settings.password.update');
 });
 
-require __DIR__.'/settings.php';
+// require __DIR__.'/settings.php';
