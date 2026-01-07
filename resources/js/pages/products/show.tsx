@@ -44,7 +44,7 @@ export default function ProductShow() {
         <>
             <Head title={`${product.name} - Gudang Sparepart`} />
 
-            <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-background">
+            <div className="relative flex min-h-screen w-full flex-col bg-background">
                 {/* Header */}
                 <Navbar auth={auth} />
 

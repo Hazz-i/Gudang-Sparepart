@@ -4,34 +4,81 @@ import Navbar from '@/components/layouts/navbar';
 import ProductCard from '@/components/product-card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { products } from '@/helper/product';
-import { type SharedData } from '@/types';
-import { Head, usePage } from '@inertiajs/react';
 import {
-    ChevronLeftIcon,
-    ChevronRightIcon,
-    FilterIcon,
-    SearchIcon,
-} from 'lucide-react';
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from '@/components/ui/pagination';
+import { type Product, type SharedData } from '@/types';
+import { Head, router, usePage } from '@inertiajs/react';
+import { FilterIcon, SearchIcon } from 'lucide-react';
+import { useState } from 'react';
 
-// Data kategori
-const categories = [
-    { id: 'all', name: 'Semua Produk', active: true },
-    { id: 'engine', name: 'Mesin', active: false },
-    { id: 'brakes', name: 'Rem', active: false },
-    { id: 'tires', name: 'Ban & Velg', active: false },
-    { id: 'electrical', name: 'Kelistrikan', active: false },
-    { id: 'accessories', name: 'Aksesoris', active: false },
-];
+type AllProduct = {
+    current_page: number;
+    data: Product[];
+    first_page_url: string;
+    from: number;
+    last_page: number;
+    last_page_url: string;
+    links: Array<any>;
+    next_page_url: string | null;
+};
+
+type Filters = {
+    category?: string;
+    brand?: string;
+    status?: string;
+    search?: string;
+};
 
 export default function ProductsIndex() {
-    const { auth } = usePage<SharedData>().props;
+    const { auth, products, categories, brands, filters } = usePage<{
+        auth: SharedData['auth'];
+        products: AllProduct;
+        categories: string[];
+        brands: string[];
+        filters: Filters;
+    }>().props;
+
+    const [searchValue, setSearchValue] = useState(filters?.search || '');
+
+    const handleCategoryClick = (category?: string) => {
+        router.get(
+            '/products',
+            { ...filters, category, page: 1 },
+            { preserveState: true, preserveScroll: true },
+        );
+    };
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        router.get(
+            '/products',
+            { ...filters, search: searchValue, page: 1 },
+            { preserveState: true, preserveScroll: true },
+        );
+    };
+
+    const buildPaginationUrl = (page: number) => {
+        const params = new URLSearchParams();
+        if (filters?.category) params.set('category', filters.category);
+        if (filters?.brand) params.set('brand', filters.brand);
+        if (filters?.status) params.set('status', filters.status);
+        if (filters?.search) params.set('search', filters.search);
+        params.set('page', page.toString());
+        return `/products?${params.toString()}`;
+    };
 
     return (
         <>
             <Head title="Daftar Produk Suku Cadang - Gudang Sparepart" />
 
-            <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-background">
+            <div className="relative flex min-h-screen w-full flex-col bg-background">
                 {/* Header */}
                 <Navbar auth={auth} />
 
@@ -50,21 +97,31 @@ export default function ProductsIndex() {
                                 </p>
                             </div>
                             <div className="flex gap-3">
-                                <div className="relative">
+                                <form
+                                    onSubmit={handleSearch}
+                                    className="relative"
+                                >
                                     <Input
                                         className="h-10 w-full pr-4 pl-10 md:w-64"
                                         placeholder="Cari suku cadang..."
                                         type="text"
+                                        value={searchValue}
+                                        onChange={(e) =>
+                                            setSearchValue(e.target.value)
+                                        }
                                     />
-                                    <span className="absolute top-2.5 left-3 text-muted-foreground">
-                                        <SearchIcon />
-                                    </span>
-                                </div>
+                                    <button
+                                        type="submit"
+                                        className="absolute top-2.5 left-3 text-muted-foreground"
+                                    >
+                                        <SearchIcon className="h-5 w-5" />
+                                    </button>
+                                </form>
                                 <Button
                                     variant="outline"
                                     className="flex items-center gap-2"
                                 >
-                                    <FilterIcon />
+                                    <FilterIcon className="h-4 w-4" />
                                     Filter
                                 </Button>
                             </div>
@@ -72,16 +129,29 @@ export default function ProductsIndex() {
 
                         {/* Category Tabs */}
                         <div className="mb-6 flex gap-2 overflow-x-auto pb-4">
-                            {categories.map((category) => (
+                            <button
+                                onClick={() => handleCategoryClick(undefined)}
+                                className={`rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
+                                    !filters?.category
+                                        ? 'bg-blue-600 text-white shadow-sm'
+                                        : 'border bg-card text-muted-foreground hover:bg-muted'
+                                }`}
+                            >
+                                Semua Produk
+                            </button>
+                            {categories?.map((category) => (
                                 <button
-                                    key={category.id}
+                                    key={category}
+                                    onClick={() =>
+                                        handleCategoryClick(category)
+                                    }
                                     className={`rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
-                                        category.active
+                                        filters?.category === category
                                             ? 'bg-blue-600 text-white shadow-sm'
                                             : 'border bg-card text-muted-foreground hover:bg-muted'
                                     }`}
                                 >
-                                    {category.name}
+                                    {category}
                                 </button>
                             ))}
                         </div>
@@ -92,7 +162,7 @@ export default function ProductsIndex() {
                 <section className="flex-grow px-4 pb-16 sm:px-10">
                     <div className="mx-auto w-full max-w-[1280px]">
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                            {products?.map((product) => (
+                            {products?.data.map((product: any) => (
                                 <ProductCard
                                     key={product.id}
                                     product={product}
@@ -101,31 +171,114 @@ export default function ProductsIndex() {
                         </div>
 
                         {/* Pagination */}
-                        <div className="mt-12 flex justify-center">
-                            <nav className="flex items-center gap-1 rounded-lg border bg-card p-1 shadow-sm">
-                                <button className="flex h-9 w-9 items-center justify-center rounded hover:bg-muted">
-                                    <ChevronLeftIcon />
-                                </button>
-                                <button className="flex h-9 w-9 items-center justify-center rounded bg-blue-600 text-sm font-bold text-white shadow-sm">
-                                    1
-                                </button>
-                                <button className="flex h-9 w-9 items-center justify-center rounded text-sm font-medium text-muted-foreground hover:bg-muted">
-                                    2
-                                </button>
-                                <button className="flex h-9 w-9 items-center justify-center rounded text-sm font-medium text-muted-foreground hover:bg-muted">
-                                    3
-                                </button>
-                                <span className="flex h-9 w-9 items-center justify-center text-sm text-muted-foreground">
-                                    ...
-                                </span>
-                                <button className="flex h-9 w-9 items-center justify-center rounded text-sm font-medium text-muted-foreground hover:bg-muted">
-                                    8
-                                </button>
-                                <button className="flex h-9 w-9 items-center justify-center rounded hover:bg-muted">
-                                    <ChevronRightIcon />
-                                </button>
-                            </nav>
-                        </div>
+                        {products?.last_page > 1 && (
+                            <div className="mt-12">
+                                <Pagination>
+                                    <PaginationContent>
+                                        {/* Previous Button */}
+                                        <PaginationItem>
+                                            <PaginationPrevious
+                                                href={
+                                                    products.current_page > 1
+                                                        ? buildPaginationUrl(
+                                                              products.current_page -
+                                                                  1,
+                                                          )
+                                                        : undefined
+                                                }
+                                                className={
+                                                    products.current_page === 1
+                                                        ? 'pointer-events-none opacity-50'
+                                                        : ''
+                                                }
+                                            />
+                                        </PaginationItem>
+
+                                        {/* Page Numbers */}
+                                        {(() => {
+                                            const pages: (number | string)[] =
+                                                [];
+                                            const current =
+                                                products.current_page;
+                                            const last = products.last_page;
+
+                                            pages.push(1);
+
+                                            if (current > 3) {
+                                                pages.push('ellipsis-start');
+                                            }
+
+                                            for (
+                                                let i = Math.max(
+                                                    2,
+                                                    current - 1,
+                                                );
+                                                i <=
+                                                Math.min(last - 1, current + 1);
+                                                i++
+                                            ) {
+                                                if (!pages.includes(i)) {
+                                                    pages.push(i);
+                                                }
+                                            }
+
+                                            if (current < last - 2) {
+                                                pages.push('ellipsis-end');
+                                            }
+
+                                            if (
+                                                last > 1 &&
+                                                !pages.includes(last)
+                                            ) {
+                                                pages.push(last);
+                                            }
+
+                                            return pages.map((page) =>
+                                                typeof page === 'string' ? (
+                                                    <PaginationItem key={page}>
+                                                        <PaginationEllipsis />
+                                                    </PaginationItem>
+                                                ) : (
+                                                    <PaginationItem key={page}>
+                                                        <PaginationLink
+                                                            href={buildPaginationUrl(
+                                                                page,
+                                                            )}
+                                                            isActive={
+                                                                page === current
+                                                            }
+                                                        >
+                                                            {page}
+                                                        </PaginationLink>
+                                                    </PaginationItem>
+                                                ),
+                                            );
+                                        })()}
+
+                                        {/* Next Button */}
+                                        <PaginationItem>
+                                            <PaginationNext
+                                                href={
+                                                    products.current_page <
+                                                    products.last_page
+                                                        ? buildPaginationUrl(
+                                                              products.current_page +
+                                                                  1,
+                                                          )
+                                                        : undefined
+                                                }
+                                                className={
+                                                    products.current_page ===
+                                                    products.last_page
+                                                        ? 'pointer-events-none opacity-50'
+                                                        : ''
+                                                }
+                                            />
+                                        </PaginationItem>
+                                    </PaginationContent>
+                                </Pagination>
+                            </div>
+                        )}
                     </div>
                 </section>
 

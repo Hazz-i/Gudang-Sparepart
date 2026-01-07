@@ -85,7 +85,7 @@ export default function Welcome() {
         <>
             <Head title="Gudang Sparepart - Sparepart Motor Instan" />
 
-            <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-background">
+            <div className="relative flex min-h-screen w-full flex-col bg-background">
                 {/* Top Navigation */}
                 <Navbar auth={auth} />
 
