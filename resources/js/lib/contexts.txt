@@ -1,0 +1,57 @@
+================================================================================
+                    CARA BOOKING SPAREPART - GUDANG SPAREPART
+================================================================================
+
+FLOW BOOKING SPAREPART:
+
+1. PILIH PRODUK SPAREPART
+   - Buka halaman katalog produk (/products)
+   - Cari sparepart yang dibutuhkan menggunakan fitur pencarian atau filter kategori
+   - Klik produk untuk melihat detail (harga, stok, spesifikasi)
+   - Klik tombol "Booking Sekarang" pada halaman detail produk
+
+2. PILIH METODE PEMBAYARAN
+   - Pilih metode pembayaran yang tersedia:
+     * Transfer Bank (BCA, BNI, BRI, Mandiri)
+     * E-Wallet (GoPay, OVO, Dana)
+     * COD (Bayar di Toko)
+   - Isi data diri (nama, email, nomor telepon)
+   - Konfirmasi pesanan
+
+3. TUNGGU KONFIRMASI PEMBAYARAN
+   - Lakukan pembayaran sesuai metode yang dipilih
+   - Admin akan memverifikasi pembayaran Anda
+   - Proses verifikasi maksimal 1x24 jam (hari kerja)
+   - Notifikasi akan dikirim via email yang didaftarkan
+
+4. DAPATKAN NOMOR BOOKING
+   - Setelah pembayaran dikonfirmasi, Anda akan menerima email konfirmasi
+   - Email berisi:
+     * Nomor Booking (format: SPB-XXXX-XXXX)
+     * Detail produk yang dipesan
+     * Alamat toko untuk pengambilan
+     * Batas waktu pengambilan
+   - Simpan nomor booking dengan baik
+
+5. CEK STATUS BOOKING
+   - Buka halaman Cek Booking (/booking-status)
+   - Masukkan nomor booking yang diterima via email
+   - Lihat status pesanan Anda:
+     * PENDING - Menunggu pembayaran
+     * CONFIRMED - Pembayaran dikonfirmasi, siap diambil
+     * COMPLETED - Sparepart sudah diambil
+     * CANCELLED - Pesanan dibatalkan
+
+6. AMBIL SPAREPART DI TOKO
+   - Kunjungi toko Gudang Sparepart
+   - Tunjukkan nomor booking kepada petugas
+   - Petugas akan memverifikasi dan menyiapkan sparepart
+   - Terima sparepart dan simpan bukti pengambilan
+
+================================================================================
+                              INFORMASI PENTING
+================================================================================
+
+- Batas waktu pengambilan: 7 hari setelah konfirmasi pembayaran
+- Jika melewati batas waktu, pesanan otomatis dibatalkan
+- Pembatalan pesanan dapat dilakukan sebelum status CONFIRMED

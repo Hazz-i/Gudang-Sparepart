@@ -6,6 +6,7 @@ use Laravel\Fortify\Features;
 
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ChatbotController;
 
 
 // GUEST ROUTES
@@ -23,6 +24,11 @@ Route::get('/products/{product}', [GuestController::class, 'productShow'])->name
 Route::get('/booking-status', function () {
     return Inertia::render('booking-status');
 })->name('booking.status');
+
+
+// CHATBOT ROUTES
+Route::get('/chatbot', [ChatbotController::class, 'index'])->name('chatbot.index');
+Route::post('/chatbot/ask', [ChatbotController::class, 'ask'])->name('chatbot.ask');
 
 
 // ADMIN ROUTES

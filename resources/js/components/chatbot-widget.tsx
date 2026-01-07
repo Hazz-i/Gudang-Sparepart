@@ -1,5 +1,7 @@
+import axios from 'axios';
 import { MessageCircleIcon, SendIcon, XIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { Card, CardContent } from './ui/card';
 
 type Message = {
@@ -12,6 +14,7 @@ const ChatbotWidget = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [inputMessage, setInputMessage] = useState<string>('');
     const [messages, setMessages] = useState<Message[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
@@ -22,38 +25,38 @@ const ChatbotWidget = () => {
         scrollToBottom();
     }, [messages]);
 
-    const getBotResponse = (userMessage: string): string => {
-        const lowerMessage = userMessage.toLowerCase();
-        if (
-            lowerMessage.includes('hai') ||
-            lowerMessage.includes('halo') ||
-            lowerMessage.includes('hi')
-        ) {
-            return 'Hai! Selamat datang di Gudang Sparepart. Ada yang bisa kami bantu?\n\nKami menyediakan berbagai sparepart berkualitas untuk kebutuhan kendaraan dan mesin Anda.\n\nJika ada yang ingin ditanyakan atau butuh rekomendasi sparepart, jangan ragu beritahu kami, ya!\n\n🔧';
-        }
-        return 'Terima kasih atas pertanyaannya! Ada yang bisa saya bantu lagi?';
-    };
-
-    const handleSend = () => {
-        if (inputMessage.trim()) {
+    const handleSend = async () => {
+        if (inputMessage.trim() && !isLoading) {
             const userMsg: Message = {
                 id: Date.now(),
                 text: inputMessage,
                 sender: 'user',
             };
             setMessages((prev) => [...prev, userMsg]);
+            setInputMessage('');
+            setIsLoading(true);
 
-            // Simulate bot response
-            setTimeout(() => {
+            try {
+                const response = await axios.post('/chatbot/ask', {
+                    question: inputMessage,
+                });
+
                 const botMsg: Message = {
                     id: Date.now() + 1,
-                    text: getBotResponse(inputMessage),
+                    text: response.data.answer,
                     sender: 'bot',
                 };
                 setMessages((prev) => [...prev, botMsg]);
-            }, 500);
-
-            setInputMessage('');
+            } catch (error) {
+                const errorMsg: Message = {
+                    id: Date.now() + 1,
+                    text: 'Maaf, terjadi kesalahan. Silakan coba lagi.',
+                    sender: 'bot',
+                };
+                setMessages((prev) => [...prev, errorMsg]);
+            } finally {
+                setIsLoading(false);
+            }
         }
     };
 
@@ -70,8 +73,23 @@ const ChatbotWidget = () => {
             </div>
 
             {isOpen && (
-                <Card className="fixed right-7 bottom-24 z-50 flex h-[400px] w-80 max-w-full flex-col overflow-hidden rounded-2xl border shadow-xl">
+                <Card className="fixed right-7 bottom-24 z-50 flex h-[450px] w-96 max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl shadow-xl">
                     <CardContent className="flex flex-1 flex-col overflow-hidden p-0">
+                        {/* Header */}
+                        <div className="flex items-center gap-3 border-b bg-blue-600 px-4 py-3 text-white">
+                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">
+                                <MessageCircleIcon className="h-5 w-5" />
+                            </div>
+                            <div>
+                                <h3 className="text-sm font-semibold">
+                                    Asisten Gudang Sparepart
+                                </h3>
+                                <p className="text-xs text-blue-100">
+                                    Tersedia 24 Jam
+                                </p>
+                            </div>
+                        </div>
+
                         {/* Chat Messages */}
                         <div className="flex flex-1 flex-col gap-3 overflow-y-auto px-4 py-4">
                             {messages.length === 0 ? (
@@ -85,6 +103,41 @@ const ChatbotWidget = () => {
                                         Sparepart. Tanya seputar sparepart dan
                                         layanan kami di sini 🔧
                                     </p>
+                                    <div className="mt-4 flex flex-wrap justify-center gap-2">
+                                        <button
+                                            onClick={() => {
+                                                setInputMessage(
+                                                    'Cara booking sparepart',
+                                                );
+                                                handleSend();
+                                            }}
+                                            className="rounded-full border bg-gray-50 px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-100"
+                                        >
+                                            Cara booking
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                setInputMessage(
+                                                    'Produk rem motor',
+                                                );
+                                                handleSend();
+                                            }}
+                                            className="rounded-full border bg-gray-50 px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-100"
+                                        >
+                                            Produk rem
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                setInputMessage(
+                                                    'Oli motor terbaik',
+                                                );
+                                                handleSend();
+                                            }}
+                                            className="rounded-full border bg-gray-50 px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-100"
+                                        >
+                                            Oli motor
+                                        </button>
+                                    </div>
                                 </div>
                             ) : (
                                 /* Messages List */
@@ -94,16 +147,83 @@ const ChatbotWidget = () => {
                                         className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                                     >
                                         <div
-                                            className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm whitespace-pre-wrap ${
+                                            className={`max-w-[85%] rounded-2xl px-4 py-2 text-sm ${
                                                 msg.sender === 'user'
                                                     ? 'rounded-br-sm bg-blue-600 text-white'
                                                     : 'rounded-bl-sm bg-gray-100 text-gray-800'
                                             }`}
                                         >
-                                            {msg.text}
+                                            {msg.sender === 'bot' ? (
+                                                <ReactMarkdown
+                                                    components={{
+                                                        p: ({ children }) => (
+                                                            <p className="mb-2 last:mb-0">
+                                                                {children}
+                                                            </p>
+                                                        ),
+                                                        strong: ({
+                                                            children,
+                                                        }) => (
+                                                            <strong className="font-semibold">
+                                                                {children}
+                                                            </strong>
+                                                        ),
+                                                        ul: ({ children }) => (
+                                                            <ul className="mb-2 ml-4 list-disc last:mb-0">
+                                                                {children}
+                                                            </ul>
+                                                        ),
+                                                        ol: ({ children }) => (
+                                                            <ol className="mb-2 ml-4 list-decimal last:mb-0">
+                                                                {children}
+                                                            </ol>
+                                                        ),
+                                                        li: ({ children }) => (
+                                                            <li className="mb-1">
+                                                                {children}
+                                                            </li>
+                                                        ),
+                                                        a: ({
+                                                            href,
+                                                            children,
+                                                        }) => (
+                                                            <a
+                                                                href={href}
+                                                                className="text-blue-600 underline hover:text-blue-800"
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                            >
+                                                                {children}
+                                                            </a>
+                                                        ),
+                                                        code: ({
+                                                            children,
+                                                        }) => (
+                                                            <code className="rounded bg-gray-200 px-1 py-0.5 font-mono text-xs">
+                                                                {children}
+                                                            </code>
+                                                        ),
+                                                    }}
+                                                >
+                                                    {msg.text}
+                                                </ReactMarkdown>
+                                            ) : (
+                                                msg.text
+                                            )}
                                         </div>
                                     </div>
                                 ))
+                            )}
+                            {isLoading && (
+                                <div className="flex justify-start">
+                                    <div className="flex items-center gap-1 rounded-2xl rounded-bl-sm bg-gray-100 px-4 py-3 text-gray-600">
+                                        <span className="inline-flex gap-1">
+                                            <span className="h-1 w-1 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.3s]"></span>
+                                            <span className="h-1 w-1 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.15s]"></span>
+                                            <span className="h-1 w-1 animate-bounce rounded-full bg-gray-400"></span>
+                                        </span>
+                                    </div>
+                                </div>
                             )}
                             <div ref={messagesEndRef} />
                         </div>
@@ -117,14 +237,18 @@ const ChatbotWidget = () => {
                                     setInputMessage(e.target.value)
                                 }
                                 onKeyDown={(e) =>
-                                    e.key === 'Enter' && handleSend()
+                                    e.key === 'Enter' &&
+                                    !isLoading &&
+                                    handleSend()
                                 }
-                                placeholder="Tulis pertanyaanmu"
-                                className="flex-1 bg-transparent text-sm text-gray-700 placeholder-gray-400 outline-none"
+                                placeholder="Tulis pertanyaanmu..."
+                                disabled={isLoading}
+                                className="flex-1 bg-transparent text-sm text-gray-700 placeholder-gray-400 outline-none disabled:opacity-50"
                             />
                             <button
                                 onClick={handleSend}
-                                className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-600 text-white transition-colors hover:bg-blue-700"
+                                disabled={isLoading || !inputMessage.trim()}
+                                className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-600 text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
                             >
                                 <SendIcon className="h-4 w-4" />
                             </button>
