@@ -145,7 +145,7 @@ export default function ProductsIndex() {
                                     onClick={() =>
                                         handleCategoryClick(category)
                                     }
-                                    className={`rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
+                                    className={`cursor-pointer  rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
                                         filters?.category === category
                                             ? 'bg-blue-600 text-white shadow-sm'
                                             : 'border bg-card text-muted-foreground hover:bg-muted'
@@ -161,7 +161,7 @@ export default function ProductsIndex() {
                 {/* Products Grid */}
                 <section className="flex-grow px-4 pb-16 sm:px-10">
                     <div className="mx-auto w-full max-w-[1280px]">
-                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        <div className="grid grid-cols-2 gap-2 lg:gap-6 lg:grid-cols-3 xl:grid-cols-4">
                             {products?.data.map((product: any) => (
                                 <ProductCard
                                     key={product.id}

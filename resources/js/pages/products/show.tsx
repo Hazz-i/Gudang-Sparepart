@@ -65,14 +65,6 @@ export default function ProductShow() {
                                     >
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-40"></div>
                                     </div>
-                                    {/* {product.is_genuine && (
-                                        <div className="absolute top-4 left-4 z-10">
-                                            <Badge className="gap-1 border bg-card/90 text-foreground backdrop-blur-sm">
-                                                <Verified className="h-4 w-4 text-blue-600" />
-                                                Produk Asli
-                                            </Badge>
-                                        </div>
-                                    )} */}
                                 </div>
                             </div>
 
@@ -81,7 +73,7 @@ export default function ProductShow() {
                                 {/* Header Section */}
                                 <div className="flex flex-grow flex-col gap-4 border-b pb-8">
                                     <div>
-                                        <h1 className="mb-2 text-3xl font-black tracking-tight sm:text-4xl">
+                                        <h1 className="mb-2 text-2xl lg:text-3xl font-black tracking-tight sm:text-4xl">
                                             {product.name}
                                         </h1>
                                         <div className="flex flex-wrap items-center gap-4 text-sm">
@@ -94,12 +86,12 @@ export default function ProductShow() {
                                     {/* Price & Stock */}
                                     <div className="mt-2 flex flex-wrap items-center gap-4">
                                         <div className="flex items-baseline gap-2">
-                                            <span className="text-base font-medium text-muted-foreground line-through">
+                                            <span className="text-sm lg:text-base font-medium text-muted-foreground line-through">
                                                 {formatPrice(
                                                     product.original_price,
                                                 )}
                                             </span>
-                                            <span className="text-4xl font-bold text-blue-600">
+                                            <span className="text-2xl lg:text-4xl font-bold text-blue-600">
                                                 {formatPrice(product.price)}
                                             </span>
                                         </div>
@@ -194,10 +186,10 @@ export default function ProductShow() {
 
                         {/* Rekomendasi Produk */}
                         <div className="border-t py-12">
-                            <h2 className="mb-8 text-2xl font-bold">
+                            <h2 className="mb-4 lg:mb-8 text-2xl font-bold">
                                 Produk Rekomendasi
                             </h2>
-                            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4">
+                            <div className={`grid ${recommendedProducts.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-2 lg:gap-6 md:grid-cols-4`}>
                                 {recommendedProducts.map(
                                     (relatedProduct: any) => (
                                         <ProductCard

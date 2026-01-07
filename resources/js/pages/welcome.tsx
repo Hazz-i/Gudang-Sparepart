@@ -8,46 +8,34 @@ import { type Product, type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import {
     ArrowRightIcon,
-    CircleIcon,
+    CheckCircle2Icon,
     ClipboardCheckIcon,
-    CogIcon,
+    ClockIcon,
     CreditCardIcon,
-    DiscIcon,
-    DropletIcon,
+    PackageCheckIcon,
     PackageSearchIcon,
     SearchIcon,
     StoreIcon,
 } from 'lucide-react';
 
-// Data kategori
-const categories = [
+const statusInfo = [
     {
-        icon: DropletIcon,
-        title: 'Oli & Cairan',
-        description: 'Oli mesin, coolant & lainnya',
-        colorClass:
-            'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300',
+        status: 'PENDING',
+        label: 'Menunggu Pembayaran',
+        color: 'bg-yellow-400',
+        icon: ClockIcon,
     },
     {
-        icon: DiscIcon,
-        title: 'Sistem Rem',
-        description: 'Kampas, cakram & tuas rem',
-        colorClass:
-            'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-300',
+        status: 'CONFIRMED',
+        label: 'Siap Diambil',
+        color: 'bg-green-400',
+        icon: CheckCircle2Icon,
     },
     {
-        icon: CircleIcon,
-        title: 'Ban & Velg',
-        description: 'Road, off-road & ban dalam',
-        colorClass:
-            'bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-300',
-    },
-    {
-        icon: CogIcon,
-        title: 'Komponen Mesin',
-        description: 'Piston, rantai & belt',
-        colorClass:
-            'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-300',
+        status: 'COMPLETED',
+        label: 'Pesanan Selesai',
+        color: 'bg-blue-400',
+        icon: PackageCheckIcon,
     },
 ];
 
@@ -139,21 +127,26 @@ export default function Welcome() {
                 </section>
 
                 {/* Popular Categories Section */}
-                <section className="bg-card py-12">
+                <section className="bg-card py-12 px-4">
                     <div className="mx-auto max-w-[1280px]">
                         <div className="flex items-center justify-between pt-2 pb-6">
-                            <h2 className="text-[28px] leading-tight font-bold tracking-tight">
+                            <h2 className="text-[22px] lg:text-[28px] leading-tight font-bold tracking-tight">
                                 Daftar Sparepart Terbaru
                             </h2>
                             <Link
-                                className="flex items-center gap-1 text-sm font-semibold text-blue-600 hover:underline"
+                                className={`items-center gap-1 text-sm font-semibold text-blue-600 hover:underline ${products ?  (products?.length < 8 ? 'hidden' : 'flex') : 'hidden'}`}
                                 href="/products"
                             >
-                                Lihat Semua <ArrowRightIcon />
+                                Lihat Semua <ArrowRightIcon className="w-4 h-4" />
                             </Link>
                         </div>
 
-                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        {products?.length === 0 && (
+                        <p className="text-center text-muted-foreground py-30">
+                            Tidak ada produk yang ditemukan
+                        </p>
+                        )}
+                        <div className="grid grid-cols-2 gap-2 lg:gap-6 lg:grid-cols-3 xl:grid-cols-4">
                             {products?.map((product: Product) => (
                                 <ProductCard
                                     key={product.id}
@@ -165,21 +158,21 @@ export default function Welcome() {
                 </section>
 
                 {/* How It Works Section */}
-                <section className="py-16">
+                <section className="py-16 px-4">
                     <div className="mx-auto max-w-[1280px]">
                         <div className="flex flex-col gap-10">
                             <div className="flex flex-col gap-4 text-center md:text-left">
-                                <h2 className="text-[32px] leading-tight font-black tracking-tight sm:text-4xl">
+                                <h2 className="text-[22px] lg:text-[32px] leading-tight font-black tracking-tight sm:text-4xl">
                                     Cara Booking Sparepart
                                 </h2>
-                                <p className="max-w-[720px] text-lg text-muted-foreground">
+                                <p className="max-w-[720px] lg:max-w-[920px] lg:text-lg text-muted-foreground">
                                     Dapatkan sparepart Anda dalam 4 langkah
                                     mudah. Reservasi online, ambil di toko tanpa
                                     antri.
                                 </p>
                             </div>
 
-                            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
                                 {steps.map((step, index) => (
                                     <Card
                                         key={index}
@@ -187,7 +180,7 @@ export default function Welcome() {
                                     >
                                         <CardContent className="flex flex-col gap-6 p-8">
                                             <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600">
-                                                <step.icon />
+                                                <step.icon className="w-6 h-6" />
                                             </div>
                                             <div className="flex flex-col gap-2">
                                                 <h3 className="text-xl font-bold">
@@ -210,7 +203,7 @@ export default function Welcome() {
                     <div className="mx-auto max-w-[1280px] px-4">
                         <Card className="overflow-hidden border-0 bg-gradient-to-br from-blue-600 via-blue-600 to-blue-700 shadow-2xl shadow-blue-600/20">
                             <CardContent className="p-0">
-                                <div className="grid gap-8 lg:grid-cols-2 lg:gap-0">
+                                <div className="grid lg:gap-8 lg:grid-cols-2 lg:gap-0">
                                     {/* Left Content */}
                                     <div className="flex flex-col justify-center gap-6 p-8 lg:p-12">
                                         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur">
@@ -229,7 +222,7 @@ export default function Welcome() {
                                         <Link href="/booking-status">
                                             <Button
                                                 size="lg"
-                                                className="h-12 w-fit rounded-xl bg-white px-6 font-semibold text-blue-600 shadow-lg transition-all hover:bg-blue-50 hover:shadow-xl"
+                                                className="h-12 w-full lg:w-fit rounded-xl bg-white px-6 font-semibold text-blue-600 shadow-lg transition-all hover:bg-blue-50 hover:shadow-xl"
                                             >
                                                 <SearchIcon className="mr-2 h-5 w-5" />
                                                 Cek Status Booking
@@ -243,39 +236,33 @@ export default function Welcome() {
                                             STATUS BOOKING
                                         </p>
                                         <div className="flex flex-col gap-3">
-                                            <div className="flex items-center gap-3 rounded-lg bg-white/10 px-4 py-3">
-                                                <div className="h-3 w-3 rounded-full bg-yellow-400 shadow-lg shadow-yellow-400/50"></div>
-                                                <div>
-                                                    <p className="font-semibold text-white">
-                                                        PENDING
-                                                    </p>
-                                                    <p className="text-sm text-blue-200">
-                                                        Menunggu pembayaran
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="flex items-center gap-3 rounded-lg bg-white/10 px-4 py-3">
-                                                <div className="h-3 w-3 rounded-full bg-green-400 shadow-lg shadow-green-400/50"></div>
-                                                <div>
-                                                    <p className="font-semibold text-white">
-                                                        CONFIRMED
-                                                    </p>
-                                                    <p className="text-sm text-blue-200">
-                                                        Siap diambil di toko
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="flex items-center gap-3 rounded-lg bg-white/10 px-4 py-3">
-                                                <div className="h-3 w-3 rounded-full bg-blue-300 shadow-lg shadow-blue-300/50"></div>
-                                                <div>
-                                                    <p className="font-semibold text-white">
-                                                        COMPLETED
-                                                    </p>
-                                                    <p className="text-sm text-blue-200">
-                                                        Pesanan selesai
-                                                    </p>
-                                                </div>
-                                            </div>
+                                            {statusInfo.map((item) => (
+                                                <Card
+                                                    key={item.status}
+                                                    className="bg-white/10 transition-shadow hover:shadow-md border-none"
+                                                >
+                                                    <CardContent className="flex items-center gap-4 p-4">
+                                                        <div
+                                                            className={`flex h-10 w-10 items-center justify-center rounded-full ${item.color}/20`}
+                                                        >
+                                                            <item.icon
+                                                                className={`h-5 w-5 ${item.color === 'bg-yellow-400' ? 'text-yellow-300' : item.color === 'bg-green-400' ? 'text-green-300' : 'text-blue-300'}`}
+                                                            />
+                                                        </div>
+                                                        <div className="flex-1">
+                                                            <p className="font-bold text-white">
+                                                                {item.status}
+                                                            </p>
+                                                            <p className="text-sm text-blue-200">
+                                                                {item.label}
+                                                            </p>
+                                                        </div>
+                                                        <div
+                                                            className={`h-3 w-3 rounded-full ${item.color}`}
+                                                        ></div>
+                                                    </CardContent>
+                                                </Card>
+                                            ))}
                                         </div>
                                     </div>
                                 </div>

@@ -75,15 +75,12 @@ const ProductCard = ({ product }: { product: Product }) => {
                             <p className="rounded-full bg-amber-100 px-2 text-xs text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
                                 {product.category}
                             </p>
-                            {/* <div className="text-xs font-medium text-muted-foreground">
-                                Kompatibel: {product.compatibility}
-                            </div> */}
                         </div>
-                        <h3 className="line-clamp-2 min-h-[3.5rem] text-lg font-bold transition-colors group-hover:text-blue-600">
+                        <h3 className="ps-1 line-clamp-2 min-h-[3.5rem] text-sm lg:text-lg font-bold transition-colors group-hover:text-blue-600">
                             {product.name}
                         </h3>
                         <div className="mt-auto flex items-center justify-between pt-2">
-                            <div className="flex items-center gap-1">
+                            <div className="ps-1 flex flex-col gap-1">
                                 {product.price > 0 ? (
                                     <>
                                         <span className="text-xs font-medium text-muted-foreground line-through">
@@ -92,14 +89,14 @@ const ProductCard = ({ product }: { product: Product }) => {
                                             )}
                                         </span>
                                         <span
-                                            className={`text-xl font-bold ${isOutOfStock ? 'text-muted-foreground' : 'text-blue-600'}`}
+                                            className={`text-lg lg:text-xl font-bold ${isOutOfStock ? 'text-muted-foreground' : 'text-blue-600'}`}
                                         >
                                             {formatPrice(product.price)}
                                         </span>
                                     </>
                                 ) : (
                                     <span
-                                        className={`text-xl font-bold ${isOutOfStock ? 'text-muted-foreground' : 'text-blue-600'}`}
+                                        className={`text-lg lg:text-xl font-bold ${isOutOfStock ? 'text-muted-foreground' : 'text-blue-600'}`}
                                     >
                                         {formatPrice(product.original_price)}
                                     </span>
