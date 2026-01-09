@@ -218,7 +218,7 @@ export default function ProductShow() {
                                     <div className="flex gap-4">
                                         <Button
                                             size="lg"
-                                            className="h-14 flex-1 rounded-xl bg-blue-600 text-lg font-bold text-white shadow-lg shadow-blue-600/25 transition-all hover:-translate-y-0.5 hover:bg-blue-700"
+                                            className="h-14 flex-1 rounded-xl bg-blue-600 text-lg font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-blue-700"
                                             onClick={() => setShowBookingDialog(true)}
                                             disabled={product.stock === 0}
                                         >
