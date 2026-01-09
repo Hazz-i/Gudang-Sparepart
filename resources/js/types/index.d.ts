@@ -87,6 +87,7 @@ export interface Order {
     email: string;
     phone: string | null;
     booking_code: string;
+    evidence: string | null;
     status: 'pending' | 'confirmed' | 'cancelled' | 'completed' ;
     quantity: number;
     total_price: number;

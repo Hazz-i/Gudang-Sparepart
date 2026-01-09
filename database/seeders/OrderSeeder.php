@@ -49,6 +49,7 @@ class OrderSeeder extends Seeder
                 'email' => $customer['email'],
                 'phone' => $customer['phone'],
                 'booking_code' => $bookingCode,
+                'evidence' => 'https://picsum.photos/seed/' . ($i + 1) . '/400/400',
                 'status' => fake()->randomElement($statuses),
                 'quantity' => $quantity,
                 'total_price' => $totalPrice,

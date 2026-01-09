@@ -21,6 +21,7 @@ Route::get('/', [GuestController::class, 'index'])->name('home');
 
 Route::get('/products', [GuestController::class, 'allProducts'])->name('products.index');
 Route::get('/products/{product}', [GuestController::class, 'productShow'])->name('products.show');
+Route::get('/products/{product}/checkout', [GuestController::class, 'checkout'])->name('products.checkout');
 
 // Customer order route (no auth required)
 Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');

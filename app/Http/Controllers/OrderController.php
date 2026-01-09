@@ -36,6 +36,7 @@ class OrderController extends Controller
             'quantity' => 'required|integer|min:1',
             'payment_method' => 'required|string|max:50',
             'product_id' => 'required|exists:products,id',
+            'evidence' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
         // Get product to calculate total price
@@ -44,6 +45,12 @@ class OrderController extends Controller
         // Check stock availability
         if ($product->stock < $validated['quantity']) {
             return back()->withErrors(['quantity' => 'Stok tidak mencukupi']);
+        }
+
+        // Handle evidence upload
+        $evidencePath = null;
+        if ($request->hasFile('evidence')) {
+            $evidencePath = $request->file('evidence')->store('evidences', 'public');
         }
 
         // Generate booking code
@@ -55,6 +62,7 @@ class OrderController extends Controller
             'email' => $validated['email'],
             'phone' => $validated['phone'],
             'booking_code' => $bookingCode,
+            'evidence' => $evidencePath,
             'status' => 'pending',
             'quantity' => $validated['quantity'],
             'total_price' => $product->price * $validated['quantity'],

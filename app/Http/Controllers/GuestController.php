@@ -70,6 +70,16 @@ class GuestController extends Controller
     }
 
     /**
+     * Show checkout page for a product
+     */
+    public function checkout(Product $product)
+    {
+        return inertia('products/checkout', [
+            'product' => $product,
+        ]);
+    }
+
+    /**
      * Show booking status page
      */
     public function bookingStatus()

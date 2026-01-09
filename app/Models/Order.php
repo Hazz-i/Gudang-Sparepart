@@ -11,6 +11,7 @@ class Order extends Model
         'email',
         'phone',
         'booking_code',
+        'evidence',
         'status',
         'quantity',
         'total_price',

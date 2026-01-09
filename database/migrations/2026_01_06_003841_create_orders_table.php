@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('phone')->nullable();
             $table->string('booking_code');
+            $table->string('evidence');
             $table->enum('status', ['pending', 'confirmed', 'cancelled', 'completed'])->default('pending');
             $table->integer('quantity');
             $table->decimal('total_price', 10, 2);

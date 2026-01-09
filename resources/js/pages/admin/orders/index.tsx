@@ -394,6 +394,25 @@ export default function OrdersManagement({ orders }: OrdersPageProps) {
                                     </div>
                                 </div>
                             </div>
+
+                            {/* Evidence */}
+                            {selectedOrder.evidence && (
+                                <div className="space-y-3">
+                                    <h4 className="font-semibold text-slate-900 dark:text-white">Bukti Pembayaran</h4>
+                                    <a
+                                        href={`/storage/${selectedOrder.evidence}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="block"
+                                    >
+                                        <img
+                                            src={`/storage/${selectedOrder.evidence}`}
+                                            alt="Bukti pembayaran"
+                                            className="h-48 w-full rounded-lg object-cover border border-slate-200 dark:border-slate-700 hover:opacity-90 transition-opacity"
+                                        />
+                                    </a>
+                                </div>
+                            )}
                         </div>
                     )}
                 </DialogContent>

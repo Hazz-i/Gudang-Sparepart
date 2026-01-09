@@ -21,5 +21,8 @@ class Product extends Model
         'warranty',
     ];
 
-    
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }
