@@ -36,10 +36,10 @@ FLOW BOOKING SPAREPART:
    - Buka halaman Cek Booking (/booking-status)
    - Masukkan nomor booking yang diterima via email
    - Lihat status pesanan Anda:
-     * PENDING - Menunggu pembayaran
-     * CONFIRMED - Pembayaran dikonfirmasi, siap diambil
-     * COMPLETED - Sparepart sudah diambil
-     * CANCELLED - Pesanan dibatalkan
+     * Menunggu - Menunggu pembayaran dikonfirmasi admin
+     * Dikonfirmasi - Sparepart siap diambil
+     * Selesai - Sparepart sudah diambil
+     * Dibatalkan - Pesanan dibatalkan
 
 6. AMBIL SPAREPART DI TOKO
    - Kunjungi toko Gudang Sparepart
@@ -53,4 +53,4 @@ FLOW BOOKING SPAREPART:
 
 - Batas waktu pengambilan: 7 hari setelah konfirmasi pembayaran
 - Jika melewati batas waktu, pesanan otomatis dibatalkan
-- Pembatalan pesanan dapat dilakukan sebelum status CONFIRMED
+- Pembatalan pesanan dapat dilakukan sebelum status Dikonfirmasi
