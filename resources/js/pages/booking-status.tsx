@@ -295,8 +295,9 @@ export default function BookingStatus({ order }: BookingStatusProps) {
                                             <p className="mt-1 text-sm text-amber-700 dark:text-amber-400">
                                                 Sparepart harus diambil dalam
                                                 waktu 7 hari setelah status
-                                                CONFIRMED. Lewat dari itu,
-                                                pesanan otomatis dibatalkan.
+                                                bookings sudah dikonfirmasi.
+                                                Lewat dari itu, pesanan
+                                                otomatis dibatalkan.
                                             </p>
                                         </CardContent>
                                     </Card>
