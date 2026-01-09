@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Product;
+use App\Models\Order;
 
 class GuestController extends Controller
 {
@@ -66,5 +67,38 @@ class GuestController extends Controller
             'product' => $product,
             'recommendedProducts' => $recommendedProducts,
         ]);
-    }   
+    }
+
+    /**
+     * Show booking status page
+     */
+    public function bookingStatus()
+    {
+        return inertia('booking-status');
+    }
+
+    /**
+     * Check order status by booking code
+     */
+    public function checkBookingStatus(Request $request)
+    {
+        $request->validate([
+            'booking_code' => 'required|string',
+        ]);
+
+        $order = Order::with('product')
+            ->where('booking_code', $request->booking_code)
+            ->first();
+
+        if (!$order) {
+            return back()->withErrors([
+                'booking_code' => 'Kode booking tidak ditemukan.',
+            ]);
+        }
+
+        return inertia('booking-status', [
+            'order' => $order,
+        ]);
+    }
 }
+

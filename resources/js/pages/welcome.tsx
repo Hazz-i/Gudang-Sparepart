@@ -16,26 +16,33 @@ import {
     PackageSearchIcon,
     SearchIcon,
     StoreIcon,
+    XCircle,
 } from 'lucide-react';
 
 const statusInfo = [
     {
-        status: 'PENDING',
-        label: 'Menunggu Pembayaran',
+        status: 'Menunggu',
+        label: 'Menunggu Konfirmasi Dari Admin',
         color: 'bg-yellow-400',
         icon: ClockIcon,
     },
     {
-        status: 'CONFIRMED',
-        label: 'Siap Diambil',
-        color: 'bg-green-400',
+        status: 'Dikonfirmasi',
+        label: 'Barang Sudah Bisa Diambil',
+        color: 'bg-blue-400',
         icon: CheckCircle2Icon,
     },
     {
-        status: 'COMPLETED',
-        label: 'Pesanan Selesai',
-        color: 'bg-blue-400',
+        status: 'Selesai',
+        label: 'Barang Sudah Selesai Diambil',
+        color: 'bg-green-400',
         icon: PackageCheckIcon,
+    },
+    {
+        status: 'Dibatalkan',
+        label: 'Proses Booking Dibatalkan Oleh Admin',
+        color: 'bg-red-400',
+        icon: XCircle,
     },
 ];
 
@@ -246,7 +253,7 @@ export default function Welcome() {
                                                             className={`flex h-10 w-10 items-center justify-center rounded-full ${item.color}/20`}
                                                         >
                                                             <item.icon
-                                                                className={`h-5 w-5 ${item.color === 'bg-yellow-400' ? 'text-yellow-300' : item.color === 'bg-green-400' ? 'text-green-300' : 'text-blue-300'}`}
+                                                                className={`h-5 w-5 ${item.color === 'bg-yellow-400' ? 'text-yellow-600' : item.color === 'bg-green-400' ? 'text-green-600' : item.color === 'bg-blue-400' ? 'text-blue-600' : 'text-red-600'}`}
                                                             />
                                                         </div>
                                                         <div className="flex-1">

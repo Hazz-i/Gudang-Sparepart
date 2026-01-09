@@ -265,7 +265,7 @@ export default function Dashboard({ stats, lowStockProducts, orderStats, recentO
                                         <div className="flex-1">
                                             <div className="flex justify-between">
                                                 <p className="font-medium text-slate-900 dark:text-white">
-                                                    Pending
+                                                    Menunggu
                                                 </p>
                                                 <span className="font-bold text-slate-900 dark:text-white">
                                                     {orderStats.pending}
@@ -278,7 +278,7 @@ export default function Dashboard({ stats, lowStockProducts, orderStats, recentO
                                                 ></div>
                                             </div>
                                             <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                                                Menunggu konfirmasi
+                                                Menunggu dikonfirmasi
                                             </p>
                                         </div>
                                     </div>
@@ -291,7 +291,7 @@ export default function Dashboard({ stats, lowStockProducts, orderStats, recentO
                                         <div className="flex-1">
                                             <div className="flex justify-between">
                                                 <p className="font-medium text-slate-900 dark:text-white">
-                                                    Confirmed
+                                                    Dikonfirmasi
                                                 </p>
                                                 <span className="font-bold text-slate-900 dark:text-white">
                                                     {orderStats.confirmed}
@@ -317,7 +317,7 @@ export default function Dashboard({ stats, lowStockProducts, orderStats, recentO
                                         <div className="flex-1">
                                             <div className="flex justify-between">
                                                 <p className="font-medium text-slate-900 dark:text-white">
-                                                    Cancelled
+                                                    Dibatalkan
                                                 </p>
                                                 <span className="font-bold text-slate-900 dark:text-white">
                                                     {orderStats.cancelled}
@@ -343,7 +343,7 @@ export default function Dashboard({ stats, lowStockProducts, orderStats, recentO
                                         <div className="flex-1">
                                             <div className="flex justify-between">
                                                 <p className="font-medium text-slate-900 dark:text-white">
-                                                    Completed
+                                                    Selesai
                                                 </p>
                                                 <span className="font-bold text-slate-900 dark:text-white">
                                                     {orderStats.completed}
@@ -359,18 +359,6 @@ export default function Dashboard({ stats, lowStockProducts, orderStats, recentO
                                                 Pesanan selesai
                                             </p>
                                         </div>
-                                    </div>
-                                </div>
-
-                                {/* Info Box */}
-                                <div className="mt-8 rounded-lg bg-slate-50 p-4 dark:bg-slate-800/50">
-                                    <div className="flex items-start gap-3">
-                                        <Info className="h-5 w-5 text-slate-400" />
-                                        <p className="text-xs leading-relaxed text-slate-600 dark:text-slate-400">
-                                            Pastikan untuk memproses pesanan
-                                            pending sebelum pukul 15:00
-                                            untuk pengiriman hari yang sama.
-                                        </p>
                                     </div>
                                 </div>
                             </div>

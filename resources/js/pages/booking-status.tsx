@@ -5,51 +5,69 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { type SharedData } from '@/types';
-import { Head, usePage } from '@inertiajs/react';
+import { formatPrice, formatDate, StatusBadge } from '@/helper/functions';
+import { type SharedData, type Order } from '@/types';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import {
     ArrowRightIcon,
     CheckCircle2Icon,
     ClockIcon,
+    Loader2,
+    Loader2Icon,
     MailIcon,
     PackageCheckIcon,
-    SearchIcon,
+    XCircle,
 } from 'lucide-react';
-import { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 const statusInfo = [
     {
-        status: 'PENDING',
-        label: 'Menunggu Pembayaran',
+        status: 'Menunggu',
+        label: 'Menunggu Konfirmasi Dari Admin',
         color: 'bg-yellow-400',
         icon: ClockIcon,
     },
     {
-        status: 'CONFIRMED',
-        label: 'Siap Diambil',
-        color: 'bg-green-400',
+        status: 'Dikonfirmasi',
+        label: 'Barang Sudah Bisa Diambil',
+        color: 'bg-blue-400',
         icon: CheckCircle2Icon,
     },
     {
-        status: 'COMPLETED',
-        label: 'Pesanan Selesai',
-        color: 'bg-blue-400',
+        status: 'Selesai',
+        label: 'Barang Sudah Selesai Diambil',
+        color: 'bg-green-400',
         icon: PackageCheckIcon,
+    },
+    {
+        status: 'Dibatalkan',
+        label: 'Proses Booking Dibatalkan Oleh Admin',
+        color: 'bg-red-400',
+        icon: XCircle,
     },
 ];
 
-export default function BookingStatus() {
+interface BookingStatusProps {
+    order?: Order;
+}
+
+export default function BookingStatus({ order }: BookingStatusProps) {
     const { auth } = usePage<SharedData>().props;
-    const [bookingCode, setBookingCode] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+
+    const form = useForm({
+        booking_code: '',
+    });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (bookingCode.trim()) {
-            setIsLoading(true);
-            // Handle check booking status
-            console.log('Checking booking:', bookingCode);
-            setTimeout(() => setIsLoading(false), 1000);
+        if (form.data.booking_code.trim()) {
+            form.post('/booking-status', {
+                onError: (errors) => {
+                    if (errors.booking_code) {
+                        toast.error(errors.booking_code);
+                    }
+                },
+            });
         }
     };
 
@@ -83,7 +101,7 @@ export default function BookingStatus() {
 
                                         {/* Form */}
                                         <form
-                                            className="flex flex-col gap-5"
+                                            className="flex flex-col gap-3"
                                             onSubmit={handleSubmit}
                                         >
                                             <div>
@@ -98,60 +116,129 @@ export default function BookingStatus() {
                                                     name="booking-code"
                                                     type="text"
                                                     required
-                                                    placeholder="SPB-XXXX-XXXX"
-                                                    value={bookingCode}
+                                                    placeholder="ORD-XXXXXXXX-XXXXX"
+                                                    value={form.data.booking_code}
                                                     onChange={(e) =>
-                                                        setBookingCode(
+                                                        form.setData(
+                                                            'booking_code',
                                                             e.target.value.toUpperCase(),
                                                         )
                                                     }
-                                                    className="h-14 rounded-xl border-slate-200 bg-slate-50 px-4 text-center font-mono text-lg font-semibold tracking-wider uppercase transition-all placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-800"
+                                                    className="h-10 rounded-xl border-slate-200 bg-slate-50 px-4 text-center font-mono text-lg font-semibold tracking-wider uppercase transition-all placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-800"
                                                 />
-                                                <p className="mt-2 text-center text-xs text-slate-500">
-                                                    Format: SPB-XXXX-XXXX
-                                                </p>
                                             </div>
 
                                             <Button
                                                 type="submit"
                                                 disabled={
-                                                    isLoading ||
-                                                    !bookingCode.trim()
+                                                    form.processing ||
+                                                    !form.data.booking_code.trim()
                                                 }
-                                                className="h-12 rounded-xl bg-blue-600 text-base font-semibold transition-all hover:bg-blue-700 hover:shadow-blue-600/30 disabled:opacity-50"
+                                                className="h-10 rounded-lg bg-blue-600 text-base font-semibold transition-all hover:bg-blue-700 hover:shadow-blue-600/30 disabled:opacity-50"
                                             >
-                                                {isLoading ? (
-                                                    <span className="flex items-center gap-2">
-                                                        <span className="inline-flex gap-1">
-                                                            <span className="h-2 w-2 animate-bounce rounded-full bg-white [animation-delay:-0.3s]"></span>
-                                                            <span className="h-2 w-2 animate-bounce rounded-full bg-white [animation-delay:-0.15s]"></span>
-                                                            <span className="h-2 w-2 animate-bounce rounded-full bg-white"></span>
-                                                        </span>
-                                                    </span>
-                                                ) : (
-                                                    <span className="flex items-center gap-2">
-                                                        Cek Status
-                                                        <ArrowRightIcon className="h-5 w-5" />
-                                                    </span>
-                                                )}
+                                                 {form.processing ? (
+                                                    <>
+                                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                        Ceking Status...
+                                                    </>
+                                                    ) : (
+                                                        'Cek Status'
+                                                    )}
                                             </Button>
                                         </form>
 
-                                        {/* Help Info */}
-                                        <div className="mt-8 flex items-start gap-3 rounded-xl bg-blue-50 p-4 dark:bg-blue-950/30">
-                                            <MailIcon className="mt-0.5 h-5 w-5 shrink-0 text-blue-600" />
-                                            <div className="text-sm">
-                                                <p className="font-semibold text-blue-900 dark:text-blue-300">
-                                                    Belum punya kode booking?
-                                                </p>
-                                                <p className="mt-1 text-blue-700 dark:text-blue-400">
-                                                    Kode booking dikirim ke
-                                                    email Anda setelah
-                                                    pembayaran dikonfirmasi. Cek
-                                                    folder inbox atau spam.
-                                                </p>
+                                        {/* Order Result */}
+                                        {order && (
+                                            <div className="mt-8 space-y-4">
+                                                <div className="flex items-center gap-2">
+                                                    <CheckCircle2Icon className="h-5 w-5 text-green-600" />
+                                                    <h3 className="font-bold text-slate-900 dark:text-white">
+                                                        Pesanan Ditemukan
+                                                    </h3>
+                                                </div>
+
+                                                {/* Booking Code & Status */}
+                                                <div className="flex items-center justify-between">
+                                                    <div>
+                                                        <p className="text-sm text-slate-500">Kode Booking</p>
+                                                        <p className="font-mono text-lg font-bold text-blue-600">
+                                                            {order.booking_code}
+                                                        </p>
+                                                    </div>
+                                                    <StatusBadge status={order.status} />
+                                                </div>
+
+                                                <hr className="border-slate-200 dark:border-slate-700" />
+
+                                                {/* Product Info */}
+                                                <div className="flex items-center gap-4">
+                                                    <div
+                                                        className="h-16 w-16 flex-shrink-0 rounded-lg bg-cover bg-center bg-slate-200"
+                                                        style={{ 
+                                                            backgroundImage: order.product?.image_url 
+                                                                ? `url('${order.product.image_url}')` 
+                                                                : undefined 
+                                                        }}
+                                                    />
+                                                    <div className="flex-1">
+                                                        <p className="font-medium text-slate-900 dark:text-white">
+                                                            {order.product?.name || '-'}
+                                                        </p>
+                                                        <p className="text-sm text-slate-500">
+                                                            {order.quantity} unit x {formatPrice(order.product?.price || 0)}
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                <hr className="border-slate-200 dark:border-slate-700" />
+
+                                                {/* Order Details */}
+                                                <div className="grid grid-cols-2 gap-4 text-sm">
+                                                    <div>
+                                                        <p className="text-slate-500">Nama Pemesan</p>
+                                                        <p className="font-medium">{order.name}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-slate-500">Email</p>
+                                                        <p className="font-medium">{order.email}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-slate-500">No. Telepon</p>
+                                                        <p className="font-medium">{order.phone || '-'}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-slate-500">Metode Pembayaran</p>
+                                                        <p className="font-medium">{order.payment_method}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-slate-500">Tanggal Pesanan</p>
+                                                        <p className="font-medium">{formatDate(order.created_at)}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-slate-500">Total Pembayaran</p>
+                                                        <p className="font-bold text-blue-600">{formatPrice(order.total_price)}</p>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
+                                        )}
+
+                                        {/* Help Info */}
+                                        {!order && (
+                                            <div className="mt-8 flex items-start gap-3 rounded-xl bg-blue-50 p-4 dark:bg-blue-950/30">
+                                                <MailIcon className="mt-0.5 h-5 w-5 shrink-0 text-blue-600" />
+                                                <div className="text-sm">
+                                                    <p className="font-semibold text-blue-900 dark:text-blue-300">
+                                                        Belum punya kode booking?
+                                                    </p>
+                                                    <p className="mt-1 text-blue-700 dark:text-blue-400">
+                                                        Kode booking dikirim ke
+                                                        email Anda setelah
+                                                        melakukan pemesanan. Cek
+                                                        folder inbox atau spam.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )}
                                     </CardContent>
                                 </Card>
                             </div>
@@ -180,7 +267,7 @@ export default function BookingStatus() {
                                                         className={`flex h-10 w-10 items-center justify-center rounded-full ${item.color}/20`}
                                                     >
                                                         <item.icon
-                                                            className={`h-5 w-5 ${item.color === 'bg-yellow-400' ? 'text-yellow-600' : item.color === 'bg-green-400' ? 'text-green-600' : 'text-blue-600'}`}
+                                                            className={`h-5 w-5 ${item.color === 'bg-yellow-400' ? 'text-yellow-600' : item.color === 'bg-green-400' ? 'text-green-600' : item.color === 'bg-blue-400' ? 'text-blue-600' : 'text-red-600'}`}
                                                         />
                                                     </div>
                                                     <div className="flex-1">
@@ -222,6 +309,24 @@ export default function BookingStatus() {
                 <Footer />
                 <ChatbotWidget />
             </div>
+
+            {/* Toast Notifications */}
+            <Toaster
+                toastOptions={{
+                    error: {
+                        style: {
+                            background: '#EF4444',
+                            color: '#fff',
+                        },
+                    },
+                    success: {
+                        style: {
+                            background: '#10B981',
+                            color: '#fff',
+                        },
+                    },
+                }}
+            />
         </>
     );
 }

@@ -25,9 +25,8 @@ Route::get('/products/{product}', [GuestController::class, 'productShow'])->name
 // Customer order route (no auth required)
 Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 
-Route::get('/booking-status', function () {
-    return Inertia::render('booking-status');
-})->name('booking.status');
+Route::get('/booking-status', [GuestController::class, 'bookingStatus'])->name('booking.status');
+Route::post('/booking-status', [GuestController::class, 'checkBookingStatus'])->name('booking.check');
 
 
 // CHATBOT ROUTES
