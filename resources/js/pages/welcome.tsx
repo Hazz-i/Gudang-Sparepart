@@ -56,21 +56,21 @@ const steps = [
     },
     {
         icon: CreditCardIcon,
-        title: '2. Pilih Pembayaran',
+        title: '2. Checkout & Bayar',
         description:
-            'Pilih metode pembayaran: Transfer Bank, E-Wallet (GoPay, OVO, Dana).',
+            'Isi data diri dan pilih metode pembayaran. Upload bukti transfer jika sudah bayar, atau pilih COD untuk bayar di tempat.',
     },
     {
         icon: ClipboardCheckIcon,
-        title: '3. Konfirmasi & Booking',
+        title: '3. Tunggu Konfirmasi',
         description:
-            'Setelah pembayaran dikonfirmasi, Anda akan menerima nomor booking via email. Simpan kode ini dengan baik.',
+            'Admin akan mengecek pesanan dan bukti pembayaran Anda. Anda akan menerima kode booking setelah dikonfirmasi.',
     },
     {
         icon: StoreIcon,
         title: '4. Ambil di Toko',
         description:
-            'Kunjungi toko kami dengan menunjukkan nomor booking. Batas pengambilan 7 hari setelah konfirmasi.',
+            'Kunjungi toko kami dengan menunjukkan kode booking. Batas pengambilan 7 hari setelah konfirmasi.',
     },
 ];
 
