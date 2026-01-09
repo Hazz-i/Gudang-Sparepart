@@ -245,7 +245,7 @@ export default function BookingStatus({ order }: BookingStatusProps) {
 
                             {/* Right - Status Info */}
                             <div className="lg:col-span-2">
-                                <div className="sticky top-24 flex flex-col gap-6">
+                                <div className="flex flex-col gap-6">
                                     <div>
                                         <h2 className="text-lg font-bold text-slate-900 dark:text-white">
                                             Status Booking

@@ -104,7 +104,7 @@ export default function Checkout() {
             <div className="flex min-h-screen flex-col bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
                 <Navbar auth={auth} />
 
-                <main className="flex-1 py-8 lg:py-12">
+                <main className="flex-1 pb-8 pt-4">
                     <div className="container mx-auto px-4">
                         {/* Back Button */}
                         <Link
@@ -250,7 +250,7 @@ export default function Checkout() {
                                         <Button
                                             type="submit"
                                             size="lg"
-                                            className="h-14 w-full rounded-xl bg-blue-600 text-lg font-bold hover:bg-blue-700"
+                                            className="h-12 w-full rounded-lg bg-blue-600 text-lg font-bold hover:bg-blue-700"
                                             disabled={isSubmitting || !formData.payment_method || !formData.name || !formData.email}
                                         >
                                             {isSubmitting ? (
@@ -271,7 +271,7 @@ export default function Checkout() {
 
                             {/* Right Column - Order Summary */}
                             <div className="lg:col-span-5">
-                                <div className="sticky top-24 space-y-6">
+                                <div className="space-y-6">
                                     <Card>
                                         <CardContent className="p-6">
                                             <h2 className="mb-6 text-lg font-bold text-slate-900 dark:text-white">Ringkasan Pesanan</h2>
@@ -345,7 +345,7 @@ export default function Checkout() {
                                                 <Button
                                                     type="submit"
                                                     size="lg"
-                                                    className="h-14 w-full rounded-xl bg-blue-600 text-lg font-bold hover:bg-blue-700"
+                                                    className="h-12 w-full rounded-lg bg-blue-600 text-lg font-bold hover:bg-blue-700"
                                                     disabled={isSubmitting || !formData.payment_method || !formData.name || !formData.email}
                                                     onClick={handleSubmit}
                                                 >
