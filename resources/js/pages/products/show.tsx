@@ -289,7 +289,7 @@ export default function ProductShow() {
                     <form onSubmit={handleBookingSubmit}>
                         <div className="space-y-4 py-4">
                             {/* Product Summary */}
-                            <div className="flex items-center gap-4 rounded-lg bg-slate-50 p-3 dark:bg-slate-800">
+                            <div className="flex items-center gap-4">
                                 <div
                                     className="h-16 w-16 flex-shrink-0 rounded-lg bg-cover bg-center"
                                     style={{ backgroundImage: `url('${product.image_url}')` }}
@@ -313,9 +313,9 @@ export default function ProductShow() {
                                         onClick={() => handleQuantityChange(-1)}
                                         disabled={quantity <= 1}
                                     >
-                                        <Minus className="h-4 w-4" />
+                                        <Minus className="h-3 w-3" />
                                     </Button>
-                                    <span className="w-12 text-center text-lg font-bold">{quantity}</span>
+                                    <span className="w-10 text-center font-bold">{quantity}</span>
                                     <Button
                                         type="button"
                                         variant="outline"
@@ -323,7 +323,7 @@ export default function ProductShow() {
                                         onClick={() => handleQuantityChange(1)}
                                         disabled={quantity >= product.stock}
                                     >
-                                        <Plus className="h-4 w-4" />
+                                        <Plus className="h-3 w-3" />
                                     </Button>
                                     <span className="text-sm text-muted-foreground">
                                         (max: {product.stock})
@@ -333,7 +333,7 @@ export default function ProductShow() {
 
                             {/* Name */}
                             <div className="space-y-2">
-                                <Label htmlFor="name">Nama Lengkap *</Label>
+                                <Label htmlFor="name">Nama Lengkap <span className='text-red-500'>*</span></Label>
                                 <Input
                                     id="name"
                                     value={form.data.name}
@@ -348,7 +348,7 @@ export default function ProductShow() {
 
                             {/* Email */}
                             <div className="space-y-2">
-                                <Label htmlFor="email">Email *</Label>
+                                <Label htmlFor="email">Email <span className='text-red-500'>*</span></Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -375,7 +375,7 @@ export default function ProductShow() {
 
                             {/* Payment Method */}
                             <div className="space-y-2">
-                                <Label>Metode Pembayaran *</Label>
+                                <Label>Metode Pembayaran <span className='text-red-500'>*</span></Label>
                                 <Select
                                     value={form.data.payment_method}
                                     onValueChange={(value) => form.setData('payment_method', value)}
@@ -398,13 +398,13 @@ export default function ProductShow() {
 
                             {/* Total */}
                             <div className="flex items-center justify-between rounded-lg bg-blue-50 p-4 dark:bg-blue-900/20">
-                                <span className="font-medium">Total Pembayaran</span>
-                                <span className="text-xl font-bold text-blue-600">
+                                <p className="font-medium">Total Pembayaran</p>
+                                <p className="font-bold text-blue-600">
                                     {formatPrice(totalPrice)}
-                                </span>
+                                </p>
                             </div>
                         </div>
-
+                                
                         <DialogFooter>
                             <Button
                                 type="button"
