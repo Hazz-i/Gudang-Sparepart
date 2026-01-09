@@ -118,7 +118,7 @@ export default function BookingStatus() {
                                                     isLoading ||
                                                     !bookingCode.trim()
                                                 }
-                                                className="h-12 rounded-xl bg-blue-600 text-base font-semibold shadow-lg shadow-blue-600/25 transition-all hover:bg-blue-700 hover:shadow-blue-600/30 disabled:opacity-50"
+                                                className="h-12 rounded-xl bg-blue-600 text-base font-semibold transition-all hover:bg-blue-700 hover:shadow-blue-600/30 disabled:opacity-50"
                                             >
                                                 {isLoading ? (
                                                     <span className="flex items-center gap-2">

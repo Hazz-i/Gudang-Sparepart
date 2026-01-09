@@ -8,6 +8,8 @@ use App\Http\Controllers\GuestController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OrderController;
 
 
 // GUEST ROUTES
@@ -19,8 +21,9 @@ Route::get('/', [GuestController::class, 'index'])->name('home');
 
 Route::get('/products', [GuestController::class, 'allProducts'])->name('products.index');
 Route::get('/products/{product}', [GuestController::class, 'productShow'])->name('products.show');
-// Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-// Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+
+// Customer order route (no auth required)
+Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 
 Route::get('/booking-status', function () {
     return Inertia::render('booking-status');
@@ -34,19 +37,17 @@ Route::post('/chatbot/ask', [ChatbotController::class, 'ask'])->name('chatbot.as
 
 // ADMIN ROUTES
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
     Route::get('/stock', [ProductController::class, 'index'])->name('stock.index');
     Route::post('/stock', [ProductController::class, 'store'])->name('stock.store');
     Route::put('/stock/{product}', [ProductController::class, 'update'])->name('stock.update');
-    Route::post('/stock/{product}', [ProductController::class, 'update'])->name('stock.update.post'); // For file upload with method spoofing
+    Route::post('/stock/{product}', [ProductController::class, 'update'])->name('stock.update.post');
     Route::delete('/stock/{product}', [ProductController::class, 'destroy'])->name('stock.destroy');
 
-    Route::get('/orders', function () {
-        return Inertia::render('admin/orders/index');
-    })->name('orders.index');
+    // Orders routes (admin)
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
 
     // Settings routes
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
@@ -55,3 +56,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 // require __DIR__.'/settings.php';
+

@@ -16,8 +16,12 @@ return new class extends Migration
             $table->string('name');
             $table->string('email');
             $table->string('phone')->nullable();
-            $table->string('address');
-            $table->string('status')->default('pending');   
+            $table->string('booking_code');
+            $table->enum('status', ['pending', 'confirmed', 'cancelled', 'completed'])->default('pending');
+            $table->integer('quantity');
+            $table->decimal('total_price', 10, 2);
+            $table->string('payment_method');
+            $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->timestamps();
         });
     }

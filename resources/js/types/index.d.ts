@@ -59,7 +59,6 @@ export interface User {
     [key: string]: unknown; // This allows for additional properties...
 }
 
-
 export interface AllProduct {
     current_page: number;
     data: Product[];
@@ -81,3 +80,18 @@ export interface Filters {
     status?: string;
     search?: string;
 };
+
+export interface Order {
+    id: number;
+    name: string;
+    email: string;
+    phone: string | null;
+    booking_code: string;
+    status: 'pending' | 'confirmed' | 'cancelled' | 'completed' ;
+    quantity: number;
+    total_price: number;
+    payment_method: string;
+    product_id: number;
+    product: Product;
+    created_at: string;
+}

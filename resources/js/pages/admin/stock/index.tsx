@@ -30,7 +30,7 @@ import {
     PaginationPrevious,
 } from '@/components/ui/pagination';
 import { Textarea } from '@/components/ui/textarea';
-import { formatPrice } from '@/helper/functions';
+import { formatPrice, ProductStatusBadge } from '@/helper/functions';
 import AppLayout from '@/layouts/app-layout';
 import { type SharedData, type Product, type AllProduct, type Filters, BreadcrumbItem } from '@/types';
 import { Head, router, useForm, usePage } from '@inertiajs/react';
@@ -57,37 +57,6 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-// Status type
-type StatusType = 'in_stock' | 'low_stock' | 'out_of_stock';
-
-// Status badge component
-function StatusBadge({ status }: { status: string }) {
-    const variants: Record<StatusType, string> = {
-        in_stock:
-            'bg-green-50 text-green-700 ring-green-600/20 dark:bg-green-500/10 dark:text-green-400 dark:ring-green-500/20',
-        low_stock:
-            'bg-yellow-50 text-yellow-700 ring-yellow-600/20 dark:bg-yellow-500/10 dark:text-yellow-400 dark:ring-yellow-500/20',
-        out_of_stock: 'bg-red-50 text-red-700 ring-red-600/20 dark:bg-red-500/10 dark:text-red-400 dark:ring-red-500/20',
-    };
-
-    const labels: Record<StatusType, string> = {
-        in_stock: 'tersedia',
-        low_stock: 'menipis',
-        out_of_stock: 'habis',
-    };
-
-    const statusKey = status as StatusType;
-    const variantClass = variants[statusKey] || variants.in_stock;
-    const label = labels[statusKey] || status;
-
-    return (
-        <span
-            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ${variantClass}`}
-        >
-            {label}
-        </span>
-    );
-}
 
 export default function StockManagement() {
     const { auth, products, filters } = usePage<{
@@ -662,7 +631,7 @@ export default function StockManagement() {
                                         <th className="px-6 py-4 text-left text-xs font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-400">
                                             Status
                                         </th>
-                                        <th className="px-6 py-4 text-right text-xs font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-400">
+                                        <th className="px-6 py-4 text-center text-xs font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-400">
                                             Aksi
                                         </th>
                                     </tr>
@@ -712,7 +681,7 @@ export default function StockManagement() {
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                <StatusBadge
+                                                <ProductStatusBadge
                                                     status={product.status}
                                                 />
                                             </td>
