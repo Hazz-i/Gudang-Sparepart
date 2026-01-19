@@ -88,9 +88,9 @@ class ProductController extends Controller
             $validated['image_url'] = '/storage/' . $path;
         }
 
-        Product::create($validated);
+        Product::create($validated);    
 
-        return redirect()->route('admin.stock.index')->with('success', 'Produk berhasil ditambahkan!');
+        return redirect()->route('stock.index')->with('success', 'Produk berhasil ditambahkan!');
     }
 
     /**
@@ -158,7 +158,7 @@ class ProductController extends Controller
 
         $product->update($validated);
 
-        return redirect()->route('admin.stock.index')->with('success', 'Produk berhasil diperbarui!');
+        return redirect()->route('stock.index')->with('success', 'Produk berhasil diperbarui!');
     }
 
     /**
@@ -174,6 +174,6 @@ class ProductController extends Controller
 
         $product->delete();
 
-        return redirect()->route('admin.stock.index')->with('success', 'Produk berhasil dihapus!');
+        return redirect()->route('stock.index')->with('success', 'Produk berhasil dihapus!');
     }
 }
