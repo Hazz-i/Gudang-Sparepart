@@ -1,15 +1,18 @@
-import { Button } from '@/components/ui/button';
-import { formatPrice, getInitials, ProductStatusBadge, getAvatarColor, StatusBadge } from '@/helper/functions';
+import {
+    formatPrice,
+    getAvatarColor,
+    getInitials,
+    ProductStatusBadge,
+    StatusBadge,
+} from '@/helper/functions';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
-import { type BreadcrumbItem, type Product, type Order } from '@/types';
+import { type BreadcrumbItem, type Order, type Product } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import {
     AlertTriangle,
     CheckCircle,
     ClipboardList,
-    Download,
-    Info,
     Package,
     PackageCheck,
     ShoppingBag,
@@ -41,9 +44,19 @@ interface DashboardProps {
     recentOrders: Order[];
 }
 
-
-export default function Dashboard({ stats, lowStockProducts, orderStats, recentOrders }: DashboardProps) {
-    const maxOrders = Math.max(orderStats.pending, orderStats.confirmed, orderStats.cancelled, orderStats.completed, 1);
+export default function Dashboard({
+    stats,
+    lowStockProducts,
+    orderStats,
+    recentOrders,
+}: DashboardProps) {
+    const maxOrders = Math.max(
+        orderStats.pending,
+        orderStats.confirmed,
+        orderStats.cancelled,
+        orderStats.completed,
+        1,
+    );
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -62,13 +75,6 @@ export default function Dashboard({ stats, lowStockProducts, orderStats, recentO
                                 terkini.
                             </p>
                         </div>
-                        <Button
-                            variant="outline"
-                            className="flex shrink-0 items-center gap-2"
-                        >
-                            <Download className="h-5 w-5" />
-                            Unduh Laporan
-                        </Button>
                     </div>
 
                     {/* Stats Cards */}
@@ -81,7 +87,9 @@ export default function Dashboard({ stats, lowStockProducts, orderStats, recentO
                                         Total Pesanan
                                     </p>
                                     <p className="mt-1 text-2xl font-bold text-slate-900 dark:text-white">
-                                        {stats.totalOrders.toLocaleString('id-ID')}
+                                        {stats.totalOrders.toLocaleString(
+                                            'id-ID',
+                                        )}
                                     </p>
                                 </div>
                                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400">
@@ -125,7 +133,9 @@ export default function Dashboard({ stats, lowStockProducts, orderStats, recentO
                                         Total Stok Fisik
                                     </p>
                                     <p className="mt-1 text-2xl font-bold text-slate-900 dark:text-white">
-                                        {stats.totalStock.toLocaleString('id-ID')}
+                                        {stats.totalStock.toLocaleString(
+                                            'id-ID',
+                                        )}
                                     </p>
                                 </div>
                                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20 dark:text-emerald-400">
@@ -207,7 +217,10 @@ export default function Dashboard({ stats, lowStockProducts, orderStats, recentO
                                                             <div
                                                                 className="h-8 w-8 flex-shrink-0 rounded-md bg-slate-100 bg-cover bg-center dark:bg-slate-800"
                                                                 style={{
-                                                                    backgroundImage: item.image_url ? `url('${item.image_url}')` : undefined,
+                                                                    backgroundImage:
+                                                                        item.image_url
+                                                                            ? `url('${item.image_url}')`
+                                                                            : undefined,
                                                                 }}
                                                             />
                                                             <div className="font-medium text-slate-900 dark:text-white">
@@ -238,8 +251,12 @@ export default function Dashboard({ stats, lowStockProducts, orderStats, recentO
                                             ))
                                         ) : (
                                             <tr>
-                                                <td colSpan={4} className="px-6 py-8 text-center text-slate-500 dark:text-slate-400">
-                                                    Tidak ada produk dengan stok menipis
+                                                <td
+                                                    colSpan={4}
+                                                    className="px-6 py-8 text-center text-slate-500 dark:text-slate-400"
+                                                >
+                                                    Tidak ada produk dengan stok
+                                                    menipis
                                                 </td>
                                             </tr>
                                         )}
@@ -274,7 +291,9 @@ export default function Dashboard({ stats, lowStockProducts, orderStats, recentO
                                             <div className="mt-2 h-2 w-full rounded-full bg-slate-100 dark:bg-slate-800">
                                                 <div
                                                     className="h-2 rounded-full bg-blue-500"
-                                                    style={{ width: `${(orderStats.pending / maxOrders) * 100}%` }}
+                                                    style={{
+                                                        width: `${(orderStats.pending / maxOrders) * 100}%`,
+                                                    }}
                                                 ></div>
                                             </div>
                                             <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
@@ -300,7 +319,9 @@ export default function Dashboard({ stats, lowStockProducts, orderStats, recentO
                                             <div className="mt-2 h-2 w-full rounded-full bg-slate-100 dark:bg-slate-800">
                                                 <div
                                                     className="h-2 rounded-full bg-green-500"
-                                                    style={{ width: `${(orderStats.confirmed / maxOrders) * 100}%` }}
+                                                    style={{
+                                                        width: `${(orderStats.confirmed / maxOrders) * 100}%`,
+                                                    }}
                                                 ></div>
                                             </div>
                                             <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
@@ -326,7 +347,9 @@ export default function Dashboard({ stats, lowStockProducts, orderStats, recentO
                                             <div className="mt-2 h-2 w-full rounded-full bg-slate-100 dark:bg-slate-800">
                                                 <div
                                                     className="h-2 rounded-full bg-red-500"
-                                                    style={{ width: `${(orderStats.cancelled / maxOrders) * 100}%` }}
+                                                    style={{
+                                                        width: `${(orderStats.cancelled / maxOrders) * 100}%`,
+                                                    }}
                                                 ></div>
                                             </div>
                                             <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
@@ -352,7 +375,9 @@ export default function Dashboard({ stats, lowStockProducts, orderStats, recentO
                                             <div className="mt-2 h-2 w-full rounded-full bg-slate-100 dark:bg-slate-800">
                                                 <div
                                                     className="h-2 rounded-full bg-emerald-500"
-                                                    style={{ width: `${(orderStats.completed / maxOrders) * 100}%` }}
+                                                    style={{
+                                                        width: `${(orderStats.completed / maxOrders) * 100}%`,
+                                                    }}
                                                 ></div>
                                             </div>
                                             <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
@@ -416,14 +441,17 @@ export default function Dashboard({ stats, lowStockProducts, orderStats, recentO
                                                     <div
                                                         className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-xs font-bold ${getAvatarColor(order.name)}`}
                                                     >
-                                                        {getInitials(order.name)}
+                                                        {getInitials(
+                                                            order.name,
+                                                        )}
                                                     </div>
                                                     <div>
                                                         <div className="font-medium text-slate-900 dark:text-white">
                                                             {order.name}
                                                         </div>
                                                         <div className="text-xs text-slate-500 dark:text-slate-400">
-                                                            {order.phone || order.email}
+                                                            {order.phone ||
+                                                                order.email}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -438,7 +466,9 @@ export default function Dashboard({ stats, lowStockProducts, orderStats, recentO
                                                 {formatPrice(order.total_price)}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                <StatusBadge status={order.status} />
+                                                <StatusBadge
+                                                    status={order.status}
+                                                />
                                             </td>
                                         </tr>
                                     ))}
@@ -446,8 +476,6 @@ export default function Dashboard({ stats, lowStockProducts, orderStats, recentO
                             </table>
                         </div>
                     </div>
-
-                    
                 </div>
             </div>
         </AppLayout>

@@ -9,14 +9,26 @@ import {
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { formatPrice, getAvatarColor, getInitials, formatDate, StatusBadge } from '@/helper/functions';
+import {
+    formatDate,
+    formatPrice,
+    getAvatarColor,
+    getInitials,
+    StatusBadge,
+} from '@/helper/functions';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, type Order } from '@/types';
 import { Head, router } from '@inertiajs/react';
-import { Check, Download, Edit, Eye, Search, XIcon } from 'lucide-react';
+import { Check, Edit, Eye, Search, XIcon } from 'lucide-react';
 import { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -31,14 +43,15 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-
 interface OrdersPageProps {
     orders: Order[];
 }
 
 export default function OrdersManagement({ orders }: OrdersPageProps) {
     const [searchQuery, setSearchQuery] = useState('');
-    const [statusFilter, setStatusFilter] = useState<'all' | Order['status']>('all');
+    const [statusFilter, setStatusFilter] = useState<'all' | Order['status']>(
+        'all',
+    );
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
     const [showStatusDialog, setShowStatusDialog] = useState(false);
     const [newStatus, setNewStatus] = useState<Order['status']>('pending');
@@ -49,10 +62,13 @@ export default function OrdersManagement({ orders }: OrdersPageProps) {
     // Filter orders
     const filteredOrders = orders.filter((order) => {
         const matchesSearch =
-            order.booking_code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            order.booking_code
+                .toLowerCase()
+                .includes(searchQuery.toLowerCase()) ||
             order.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
             order.email.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesStatus = statusFilter === 'all' || order.status === statusFilter;
+        const matchesStatus =
+            statusFilter === 'all' || order.status === statusFilter;
         return matchesSearch && matchesStatus;
     });
 
@@ -80,7 +96,7 @@ export default function OrdersManagement({ orders }: OrdersPageProps) {
                     toast.error('Gagal memperbarui status pesanan.');
                     setIsUpdating(false);
                 },
-            }
+            },
         );
     };
 
@@ -100,13 +116,6 @@ export default function OrdersManagement({ orders }: OrdersPageProps) {
                                 Kelola pesanan sparepart dari pelanggan.
                             </p>
                         </div>
-                        <Button
-                            variant="outline"
-                            className="flex shrink-0 items-center gap-2"
-                        >
-                            <Download className="h-5 w-5" />
-                            Export Data
-                        </Button>
                     </div>
 
                     {/* Search & Filter Toolbar */}
@@ -130,44 +139,61 @@ export default function OrdersManagement({ orders }: OrdersPageProps) {
                                 Status:
                             </span>
                             <button
-                                   className={`cursor-pointer  rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
-                                        statusFilter === 'all' 
-                                            ? 'bg-blue-600 text-white shadow-sm'
-                                            : 'border bg-card text-muted-foreground hover:bg-muted'
-                                    }`}
+                                className={`cursor-pointer rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
+                                    statusFilter === 'all'
+                                        ? 'bg-blue-600 text-white shadow-sm'
+                                        : 'border bg-card text-muted-foreground hover:bg-muted'
+                                }`}
                                 onClick={() => setStatusFilter('all')}
                             >
                                 Semua ({orders.length})
                             </button>
                             <button
-                                   className={`cursor-pointer  rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
-                                        statusFilter === 'pending' 
-                                            ? 'bg-blue-600 text-white shadow-sm'
-                                            : 'border bg-card text-muted-foreground hover:bg-muted'
-                                    }`}
+                                className={`cursor-pointer rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
+                                    statusFilter === 'pending'
+                                        ? 'bg-blue-600 text-white shadow-sm'
+                                        : 'border bg-card text-muted-foreground hover:bg-muted'
+                                }`}
                                 onClick={() => setStatusFilter('pending')}
                             >
-                                Menunggu ({orders.filter((o) => o.status === 'pending').length})
+                                Menunggu (
+                                {
+                                    orders.filter((o) => o.status === 'pending')
+                                        .length
+                                }
+                                )
                             </button>
                             <button
-                                   className={`cursor-pointer  rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
-                                        statusFilter === 'confirmed' 
-                                            ? 'bg-blue-600 text-white shadow-sm'
-                                            : 'border bg-card text-muted-foreground hover:bg-muted'
-                                    }`}
+                                className={`cursor-pointer rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
+                                    statusFilter === 'confirmed'
+                                        ? 'bg-blue-600 text-white shadow-sm'
+                                        : 'border bg-card text-muted-foreground hover:bg-muted'
+                                }`}
                                 onClick={() => setStatusFilter('confirmed')}
                             >
-                                Dikonfirmasi ({orders.filter((o) => o.status === 'confirmed').length})
+                                Dikonfirmasi (
+                                {
+                                    orders.filter(
+                                        (o) => o.status === 'confirmed',
+                                    ).length
+                                }
+                                )
                             </button>
                             <button
-                                   className={`cursor-pointer  rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
-                                        statusFilter === 'cancelled' 
-                                            ? 'bg-blue-600 text-white shadow-sm'
-                                            : 'border bg-card text-muted-foreground hover:bg-muted'
-                                    }`}
+                                className={`cursor-pointer rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
+                                    statusFilter === 'cancelled'
+                                        ? 'bg-blue-600 text-white shadow-sm'
+                                        : 'border bg-card text-muted-foreground hover:bg-muted'
+                                }`}
                                 onClick={() => setStatusFilter('cancelled')}
                             >
-                                Dibatalkan ({orders.filter((o) => o.status === 'cancelled').length})
+                                Dibatalkan (
+                                {
+                                    orders.filter(
+                                        (o) => o.status === 'cancelled',
+                                    ).length
+                                }
+                                )
                             </button>
                         </div>
                     </div>
@@ -213,31 +239,39 @@ export default function OrdersManagement({ orders }: OrdersPageProps) {
                                                         <div
                                                             className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-xs font-bold ${getAvatarColor(order.name)}`}
                                                         >
-                                                            {getInitials(order.name)}
+                                                            {getInitials(
+                                                                order.name,
+                                                            )}
                                                         </div>
                                                         <div>
                                                             <div className="font-medium text-slate-900 dark:text-white">
                                                                 {order.name}
                                                             </div>
                                                             <div className="text-xs text-slate-500 dark:text-slate-400">
-                                                                {order.phone || order.email}
+                                                                {order.phone ||
+                                                                    order.email}
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4 text-sm whitespace-nowrap text-slate-600 dark:text-slate-300">
                                                     <div className="font-medium">
-                                                        {order.product?.name || '-'}
+                                                        {order.product?.name ||
+                                                            '-'}
                                                     </div>
                                                     <div className="text-xs text-slate-500">
                                                         {order.quantity} Unit
                                                     </div>
                                                 </td>
                                                 <td className="px-6 py-4 text-sm font-medium whitespace-nowrap text-slate-900 dark:text-white">
-                                                    {formatPrice(order.total_price)}
+                                                    {formatPrice(
+                                                        order.total_price,
+                                                    )}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap">
-                                                    <StatusBadge status={order.status} />
+                                                    <StatusBadge
+                                                        status={order.status}
+                                                    />
                                                 </td>
                                                 <td className="px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
                                                     <div className="flex justify-end gap-2">
@@ -246,47 +280,66 @@ export default function OrdersManagement({ orders }: OrdersPageProps) {
                                                             size="icon"
                                                             className="h-8 w-8 bg-slate-100 text-blue-600 hover:bg-slate-200 hover:text-blue-700 dark:text-slate-500"
                                                             onClick={() => {
-                                                                setSelectedOrder(order);
-                                                                setIsDetailDialogOpen(true);
+                                                                setSelectedOrder(
+                                                                    order,
+                                                                );
+                                                                setIsDetailDialogOpen(
+                                                                    true,
+                                                                );
                                                             }}
                                                         >
                                                             <Eye className="h-4 w-4" />
                                                         </Button>
-                                                        {order.status !== 'completed' && order.status !== 'cancelled' && order.status !== 'confirmed' && (
-                                                            <>
-                                                                <Button
-                                                                variant="ghost"
-                                                                size="icon"
-                                                                className="bg-yellow-50 text-yellow-700 ring-yellow-600/20 hover:bg-yellow-100 hover:text-yellow-800"
-                                                                onClick={() =>
-                                                                    handleStatusChange(order, 'confirmed')
-                                                                }
-                                                            >
-                                                                <Edit className="h-4 w-4" />
-                                                            </Button>
+                                                        {order.status !==
+                                                            'completed' &&
+                                                            order.status !==
+                                                                'cancelled' &&
+                                                            order.status !==
+                                                                'confirmed' && (
+                                                                <>
+                                                                    <Button
+                                                                        variant="ghost"
+                                                                        size="icon"
+                                                                        className="bg-yellow-50 text-yellow-700 ring-yellow-600/20 hover:bg-yellow-100 hover:text-yellow-800"
+                                                                        onClick={() =>
+                                                                            handleStatusChange(
+                                                                                order,
+                                                                                'confirmed',
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <Edit className="h-4 w-4" />
+                                                                    </Button>
+                                                                    <Button
+                                                                        variant="ghost"
+                                                                        size="icon"
+                                                                        className="bg-red-50 text-red-700 ring-red-600/20 hover:bg-red-100 hover:text-red-800"
+                                                                        onClick={() =>
+                                                                            handleStatusChange(
+                                                                                order,
+                                                                                'cancelled',
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <XIcon className="h-4 w-4" />
+                                                                    </Button>
+                                                                </>
+                                                            )}
+                                                        {order.status ===
+                                                            'confirmed' && (
                                                             <Button
                                                                 variant="ghost"
                                                                 size="icon"
-                                                                className="bg-red-50 text-red-700 ring-red-600/20 hover:bg-red-100 hover:text-red-800"
+                                                                className="bg-green-50 text-green-700 ring-green-600/20 hover:bg-green-100 hover:text-green-800"
                                                                 onClick={() =>
-                                                                handleStatusChange(order, 'cancelled')
+                                                                    handleStatusChange(
+                                                                        order,
+                                                                        'completed',
+                                                                    )
                                                                 }
                                                             >
-                                                                <XIcon className="h-4 w-4" />
+                                                                <Check className="h-4 w-4" />
                                                             </Button>
-                                                            </>
-                                                        )}
-                                                        {order.status === 'confirmed' && (
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="icon"
-                                                            className="bg-green-50 text-green-700 ring-green-600/20 hover:bg-green-100 hover:text-green-800"
-                                                            onClick={() =>
-                                                                handleStatusChange(order, 'completed')
-                                                            }
-                                                        >
-                                                            <Check className="h-4 w-4" />
-                                                        </Button>
                                                         )}
                                                     </div>
                                                 </td>
@@ -294,7 +347,10 @@ export default function OrdersManagement({ orders }: OrdersPageProps) {
                                         ))
                                     ) : (
                                         <tr>
-                                            <td colSpan={8} className="px-6 py-12 text-center text-slate-500 dark:text-slate-400">
+                                            <td
+                                                colSpan={8}
+                                                className="px-6 py-12 text-center text-slate-500 dark:text-slate-400"
+                                            >
                                                 Tidak ada pesanan ditemukan
                                             </td>
                                         </tr>
@@ -324,12 +380,18 @@ export default function OrdersManagement({ orders }: OrdersPageProps) {
             </div>
 
             {/* Show Detail Modal */}
-            <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
+            <Dialog
+                open={isDetailDialogOpen}
+                onOpenChange={setIsDetailDialogOpen}
+            >
                 <DialogContent className="sm:max-w-lg">
                     <DialogHeader>
                         <DialogTitle>Detail Pesanan</DialogTitle>
                         <DialogDescription>
-                            Kode Booking: <span className="font-semibold">{selectedOrder?.booking_code}</span>
+                            Kode Booking:{' '}
+                            <span className="font-semibold">
+                                {selectedOrder?.booking_code}
+                            </span>
                         </DialogDescription>
                     </DialogHeader>
                     {selectedOrder && (
@@ -337,60 +399,104 @@ export default function OrdersManagement({ orders }: OrdersPageProps) {
                             {/* Product Info */}
                             <div className="flex items-center gap-4 rounded-lg">
                                 <div
-                                    className="h-16 w-16 flex-shrink-0 rounded-lg bg-cover bg-center bg-slate-200"
-                                    style={{ backgroundImage: selectedOrder.product?.image_url ? `url('${selectedOrder.product.image_url}')` : undefined }}
+                                    className="h-16 w-16 flex-shrink-0 rounded-lg bg-slate-200 bg-cover bg-center"
+                                    style={{
+                                        backgroundImage: selectedOrder.product
+                                            ?.image_url
+                                            ? `url('${selectedOrder.product.image_url}')`
+                                            : undefined,
+                                    }}
                                 />
                                 <div className="flex-1">
                                     <p className="font-medium text-slate-900 dark:text-white">
                                         {selectedOrder.product?.name || '-'}
                                     </p>
                                     <p className="text-sm text-muted-foreground">
-                                        {selectedOrder.quantity} unit x {formatPrice(selectedOrder.product?.price || 0)}
+                                        {selectedOrder.quantity} unit x{' '}
+                                        {formatPrice(
+                                            selectedOrder.product?.price || 0,
+                                        )}
                                     </p>
                                 </div>
                             </div>
 
                             {/* Customer Info */}
                             <div className="space-y-3">
-                                <h4 className="font-semibold text-slate-900 dark:text-white">Informasi Pelanggan</h4>
+                                <h4 className="font-semibold text-slate-900 dark:text-white">
+                                    Informasi Pelanggan
+                                </h4>
                                 <div className="grid grid-cols-2 gap-4 text-sm">
                                     <div>
-                                        <Label className="text-muted-foreground">Nama</Label>
-                                        <p className="font-medium">{selectedOrder.name}</p>
+                                        <Label className="text-muted-foreground">
+                                            Nama
+                                        </Label>
+                                        <p className="font-medium">
+                                            {selectedOrder.name}
+                                        </p>
                                     </div>
                                     <div>
-                                        <Label className="text-muted-foreground">Email</Label>
-                                        <p className="font-medium">{selectedOrder.email}</p>
+                                        <Label className="text-muted-foreground">
+                                            Email
+                                        </Label>
+                                        <p className="font-medium">
+                                            {selectedOrder.email}
+                                        </p>
                                     </div>
                                     <div>
-                                        <Label className="text-muted-foreground">No. Telepon</Label>
-                                        <p className="font-medium">{selectedOrder.phone || '-'}</p>
+                                        <Label className="text-muted-foreground">
+                                            No. Telepon
+                                        </Label>
+                                        <p className="font-medium">
+                                            {selectedOrder.phone || '-'}
+                                        </p>
                                     </div>
                                     <div>
-                                        <Label className="text-muted-foreground">Metode Pembayaran</Label>
-                                        <p className="font-medium">{selectedOrder.payment_method}</p>
+                                        <Label className="text-muted-foreground">
+                                            Metode Pembayaran
+                                        </Label>
+                                        <p className="font-medium">
+                                            {selectedOrder.payment_method}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Order Info */}
                             <div className="space-y-3">
-                                <h4 className="font-semibold text-slate-900 dark:text-white">Informasi Pesanan</h4>
+                                <h4 className="font-semibold text-slate-900 dark:text-white">
+                                    Informasi Pesanan
+                                </h4>
                                 <div className="grid grid-cols-2 gap-4 text-sm">
                                     <div>
-                                        <Label className="text-muted-foreground">Tanggal Pesanan</Label>
-                                        <p className="font-medium">{formatDate(selectedOrder.created_at)}</p>
+                                        <Label className="text-muted-foreground">
+                                            Tanggal Pesanan
+                                        </Label>
+                                        <p className="font-medium">
+                                            {formatDate(
+                                                selectedOrder.created_at,
+                                            )}
+                                        </p>
                                     </div>
                                     <div>
-                                        <Label className="text-muted-foreground">Status</Label>
+                                        <Label className="text-muted-foreground">
+                                            Status
+                                        </Label>
                                         <div className="mt-1">
-                                            <StatusBadge status={selectedOrder.status} />
+                                            <StatusBadge
+                                                status={selectedOrder.status}
+                                            />
                                         </div>
                                     </div>
 
                                     <div>
-                                        <Label className="text-muted-foreground">Total Harga</Label>
-                                        <p className="font-medium text-blue-600">{formatPrice(selectedOrder.total_price)}</p>
+                                        <Label className="text-muted-foreground">
+                                            Total Harga
+                                        </Label>
+                                        <p className="font-medium text-blue-600">
+                                            {formatPrice(
+                                                selectedOrder.total_price,
+                                            )}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -398,7 +504,9 @@ export default function OrdersManagement({ orders }: OrdersPageProps) {
                             {/* Evidence */}
                             {selectedOrder.evidence && (
                                 <div className="space-y-3">
-                                    <h4 className="font-semibold text-slate-900 dark:text-white">Bukti Pembayaran</h4>
+                                    <h4 className="font-semibold text-slate-900 dark:text-white">
+                                        Bukti Pembayaran
+                                    </h4>
                                     <a
                                         href={`/storage/${selectedOrder.evidence}`}
                                         target="_blank"
@@ -408,7 +516,7 @@ export default function OrdersManagement({ orders }: OrdersPageProps) {
                                         <img
                                             src={`/storage/${selectedOrder.evidence}`}
                                             alt="Bukti pembayaran"
-                                            className="h-48 w-full rounded-lg object-cover border border-slate-200 dark:border-slate-700 hover:opacity-90 transition-opacity"
+                                            className="h-48 w-full rounded-lg border border-slate-200 object-cover transition-opacity hover:opacity-90 dark:border-slate-700"
                                         />
                                     </a>
                                 </div>
@@ -419,32 +527,43 @@ export default function OrdersManagement({ orders }: OrdersPageProps) {
             </Dialog>
 
             {/* Status Change Confirmation Dialog */}
-            <AlertDialog open={showStatusDialog} onOpenChange={setShowStatusDialog}>
+            <AlertDialog
+                open={showStatusDialog}
+                onOpenChange={setShowStatusDialog}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Konfirmasi Perubahan Status</AlertDialogTitle>
+                        <AlertDialogTitle>
+                            Konfirmasi Perubahan Status
+                        </AlertDialogTitle>
                         <AlertDialogDescription>
                             Apakah Anda yakin ingin mengubah status pesanan{' '}
-                            <span className="font-semibold">{selectedOrder?.booking_code}</span> menjadi{' '}
+                            <span className="font-semibold">
+                                {selectedOrder?.booking_code}
+                            </span>{' '}
+                            menjadi{' '}
                             <span className="font-semibold">
                                 {newStatus === 'pending'
                                     ? 'Menunggu'
                                     : newStatus === 'confirmed'
-                                    ? 'Dikonfirmasi'
-                                    : newStatus === 'completed'
-                                    ? 'Selesai'
-                                    : 'Dibatalkan'}
+                                      ? 'Dikonfirmasi'
+                                      : newStatus === 'completed'
+                                        ? 'Selesai'
+                                        : 'Dibatalkan'}
                             </span>
                             ?
                             {newStatus === 'cancelled' && (
                                 <span className="mt-2 block text-red-600">
-                                    Catatan: Membatalkan pesanan akan mengembalikan stok produk.
+                                    Catatan: Membatalkan pesanan akan
+                                    mengembalikan stok produk.
                                 </span>
                             )}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel disabled={isUpdating}>Batal</AlertDialogCancel>
+                        <AlertDialogCancel disabled={isUpdating}>
+                            Batal
+                        </AlertDialogCancel>
                         <AlertDialogAction
                             onClick={confirmStatusChange}
                             disabled={isUpdating}
@@ -452,10 +571,10 @@ export default function OrdersManagement({ orders }: OrdersPageProps) {
                                 newStatus === 'confirmed'
                                     ? 'bg-yellow-600 hover:bg-yellow-700'
                                     : newStatus === 'cancelled'
-                                    ? 'bg-red-600 hover:bg-red-700'
-                                    : newStatus === 'completed'
-                                    ? 'bg-green-600 hover:bg-green-700'
-                                    : 'bg-yellow-600 hover:bg-yellow-700'
+                                      ? 'bg-red-600 hover:bg-red-700'
+                                      : newStatus === 'completed'
+                                        ? 'bg-green-600 hover:bg-green-700'
+                                        : 'bg-yellow-600 hover:bg-yellow-700'
                             }
                         >
                             {isUpdating ? 'Memproses...' : 'Ya, Ubah Status'}
