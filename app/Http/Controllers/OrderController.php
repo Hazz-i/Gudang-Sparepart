@@ -34,10 +34,11 @@ class OrderController extends Controller
             'email' => 'required|email|max:255',
             'phone' => 'nullable|string|max:20',
             'quantity' => 'required|integer|min:1',
-            'payment_method' => 'required|string|max:50',
             'product_id' => 'required|exists:products,id',
-            'evidence' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'evidence' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
+
+        $validated['payment_method'] = 'qris';
 
         // Get product to calculate total price
         $product = Product::findOrFail($validated['product_id']);

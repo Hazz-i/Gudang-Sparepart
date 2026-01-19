@@ -115,12 +115,18 @@ export default function ProductShow() {
                                     {product.original_price > product.price && (
                                         <>
                                             <span className="text-lg text-slate-400 line-through">
-                                                {formatPrice(product.original_price)}
+                                                {formatPrice(
+                                                    product.original_price,
+                                                )}
                                             </span>
                                             <Badge className="bg-red-100 text-red-700">
                                                 {Math.round(
-                                                    ((product.original_price - product.price) / product.original_price) * 100
-                                                )}% OFF
+                                                    ((product.original_price -
+                                                        product.price) /
+                                                        product.original_price) *
+                                                        100,
+                                                )}
+                                                % OFF
                                             </Badge>
                                         </>
                                     )}
@@ -128,11 +134,18 @@ export default function ProductShow() {
 
                                 {/* Stock Info */}
                                 <div className="flex items-center gap-2 text-sm">
-                                    <span className="text-slate-500">Stok:</span>
-                                    <span className={`font-semibold ${
-                                        product.stock > 10 ? 'text-green-600' :
-                                        product.stock > 0 ? 'text-amber-600' : 'text-red-600'
-                                    }`}>
+                                    <span className="text-slate-500">
+                                        Stok:
+                                    </span>
+                                    <span
+                                        className={`font-semibold ${
+                                            product.stock > 10
+                                                ? 'text-green-600'
+                                                : product.stock > 0
+                                                  ? 'text-amber-600'
+                                                  : 'text-red-600'
+                                        }`}
+                                    >
                                         {product.stock} unit
                                     </span>
                                 </div>
@@ -154,20 +167,36 @@ export default function ProductShow() {
                                     </h3>
                                     <div className="grid grid-cols-1 gap-x-8 gap-y-4 text-sm sm:grid-cols-2">
                                         <div className="flex justify-between border-b pb-2">
-                                            <span className="text-muted-foreground">Garansi</span>
-                                            <span className="font-medium">{product.warranty}</span>
+                                            <span className="text-muted-foreground">
+                                                Garansi
+                                            </span>
+                                            <span className="font-medium">
+                                                {product.warranty}
+                                            </span>
                                         </div>
                                         <div className="flex justify-between border-b pb-2">
-                                            <span className="text-muted-foreground">Kategori</span>
-                                            <span className="font-medium">{product.category}</span>
+                                            <span className="text-muted-foreground">
+                                                Kategori
+                                            </span>
+                                            <span className="font-medium">
+                                                {product.category}
+                                            </span>
                                         </div>
                                         <div className="flex justify-between border-b pb-2">
-                                            <span className="text-muted-foreground">Material</span>
-                                            <span className="font-medium">{product.material}</span>
+                                            <span className="text-muted-foreground">
+                                                Material
+                                            </span>
+                                            <span className="font-medium">
+                                                {product.material}
+                                            </span>
                                         </div>
                                         <div className="flex justify-between border-b pb-2">
-                                            <span className="text-muted-foreground">Merek</span>
-                                            <span className="font-medium">{product.brand}</span>
+                                            <span className="text-muted-foreground">
+                                                Merek
+                                            </span>
+                                            <span className="font-medium">
+                                                {product.brand}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -182,7 +211,9 @@ export default function ProductShow() {
                                                 className="h-14 flex-1 rounded-xl bg-blue-600 text-lg font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-blue-700"
                                                 asChild
                                             >
-                                                <Link href={`/products/${product.id}/checkout`}>
+                                                <Link
+                                                    href={`/products/${product.id}/checkout`}
+                                                >
                                                     Booking Sekarang
                                                 </Link>
                                             </Button>
@@ -200,7 +231,11 @@ export default function ProductShow() {
                                             variant="outline"
                                             className="h-14 w-14 rounded-xl"
                                             onClick={handleShare}
-                                            title={copied ? 'Link disalin!' : 'Bagikan'}
+                                            title={
+                                                copied
+                                                    ? 'Link disalin!'
+                                                    : 'Bagikan'
+                                            }
                                         >
                                             {copied ? (
                                                 <CheckIcon className="h-5 w-5 text-green-600" />
@@ -214,16 +249,18 @@ export default function ProductShow() {
                         </div>
 
                         {/* Rekomendasi Produk */}
-                        <div className="border-t py-12">
-                            <h2 className="mb-4 lg:mb-8 text-2xl font-bold">
+                        <div className="py-12">
+                            <h2 className="mb-4 text-2xl font-bold lg:mb-8">
                                 Produk Rekomendasi
                             </h2>
                             {recommendedProducts.length < 1 && (
-                                <span className='flex items-center justify-center h-12'>
+                                <span className="flex h-12 items-center justify-center">
                                     <p>Belum ada produk serupa</p>
                                 </span>
                             )}
-                            <div className={`grid ${recommendedProducts.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-2 lg:gap-6 md:grid-cols-4`}>
+                            <div
+                                className={`grid ${recommendedProducts.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-2 md:grid-cols-4 lg:gap-6`}
+                            >
                                 {recommendedProducts.map(
                                     (relatedProduct: any) => (
                                         <ProductCard
