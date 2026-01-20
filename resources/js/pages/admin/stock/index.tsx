@@ -32,7 +32,13 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { formatPrice, ProductStatusBadge } from '@/helper/functions';
 import AppLayout from '@/layouts/app-layout';
-import { type SharedData, type Product, type AllProduct, type Filters, BreadcrumbItem } from '@/types';
+import {
+    type AllProduct,
+    type Filters,
+    type Product,
+    type SharedData,
+    BreadcrumbItem,
+} from '@/types';
 import { Head, router, useForm, usePage } from '@inertiajs/react';
 import {
     Edit,
@@ -57,7 +63,6 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-
 export default function StockManagement() {
     const { auth, products, filters } = usePage<{
         auth: SharedData['auth'];
@@ -72,12 +77,18 @@ export default function StockManagement() {
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(
+        null,
+    );
     const [isDeleting, setIsDeleting] = useState(false);
 
     // Image upload states
-    const [createImagePreview, setCreateImagePreview] = useState<string | null>(null);
-    const [editImagePreview, setEditImagePreview] = useState<string | null>(null);
+    const [createImagePreview, setCreateImagePreview] = useState<string | null>(
+        null,
+    );
+    const [editImagePreview, setEditImagePreview] = useState<string | null>(
+        null,
+    );
     const createImageRef = useRef<HTMLInputElement>(null);
     const editImageRef = useRef<HTMLInputElement>(null);
 
@@ -145,7 +156,9 @@ export default function StockManagement() {
     });
 
     // Handle create image change
-    const handleCreateImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleCreateImageChange = (
+        e: React.ChangeEvent<HTMLInputElement>,
+    ) => {
         const file = e.target.files?.[0];
         if (file) {
             createForm.setData('image', file);
@@ -203,10 +216,13 @@ export default function StockManagement() {
                 });
             },
             onError: () => {
-                toast.error('Gagal menambahkan produk. Periksa kembali data Anda.', {
-                    duration: 4000,
-                    position: 'top-right',
-                });
+                toast.error(
+                    'Gagal menambahkan produk. Periksa kembali data Anda.',
+                    {
+                        duration: 4000,
+                        position: 'top-right',
+                    },
+                );
             },
         });
     };
@@ -215,7 +231,7 @@ export default function StockManagement() {
     const handleEditProduct = (e: React.FormEvent) => {
         e.preventDefault();
         if (!selectedProduct) return;
-        
+
         editForm.post(`/stock/${selectedProduct.id}`, {
             forceFormData: true,
             headers: {
@@ -232,10 +248,13 @@ export default function StockManagement() {
                 });
             },
             onError: () => {
-                toast.error('Gagal memperbarui produk. Periksa kembali data Anda.', {
-                    duration: 4000,
-                    position: 'top-right',
-                });
+                toast.error(
+                    'Gagal memperbarui produk. Periksa kembali data Anda.',
+                    {
+                        duration: 4000,
+                        position: 'top-right',
+                    },
+                );
             },
         });
     };
@@ -244,7 +263,7 @@ export default function StockManagement() {
     const handleDeleteProduct = () => {
         if (!selectedProduct) return;
         setIsDeleting(true);
-        
+
         router.delete(`/stock/${selectedProduct.id}`, {
             onSuccess: () => {
                 setIsDeleteDialogOpen(false);
@@ -354,13 +373,12 @@ export default function StockManagement() {
                                             Tambah Barang Baru
                                         </DialogTitle>
                                         <DialogDescription>
-                                            Masukkan informasi barang baru yang akan
-                                            ditambahkan.
+                                            Masukkan informasi barang baru yang
+                                            akan ditambahkan.
                                         </DialogDescription>
                                     </DialogHeader>
                                     <div className="grid gap-4 py-4">
-                                        <span className='flex gap-2 lg:gap-4 flex-col lg:flex-row'>
-
+                                        <span className="flex flex-col gap-2 lg:flex-row lg:gap-4">
                                             {/* Image Upload */}
                                             <div className="grid gap-2">
                                                 <Label>Gambar Produk</Label>
@@ -368,13 +386,17 @@ export default function StockManagement() {
                                                     {createImagePreview ? (
                                                         <div className="relative">
                                                             <img
-                                                                src={createImagePreview}
+                                                                src={
+                                                                    createImagePreview
+                                                                }
                                                                 alt="Preview"
-                                                                className="h-24 w-24 rounded-lg object-cover border border-slate-200 dark:border-slate-700"
+                                                                className="h-24 w-24 rounded-lg border border-slate-200 object-cover dark:border-slate-700"
                                                             />
                                                             <button
                                                                 type="button"
-                                                                onClick={removeCreateImage}
+                                                                onClick={
+                                                                    removeCreateImage
+                                                                }
                                                                 className="absolute -top-2 -right-2 rounded-full bg-red-500 p-1 text-white hover:bg-red-600"
                                                             >
                                                                 <X className="h-3 w-3" />
@@ -386,7 +408,9 @@ export default function StockManagement() {
                                                             className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-300 bg-slate-50 hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700"
                                                         >
                                                             <ImagePlus className="h-8 w-8 text-slate-400" />
-                                                            <span className="mt-1 text-xs text-slate-500">Upload</span>
+                                                            <span className="mt-1 text-xs text-slate-500">
+                                                                Upload
+                                                            </span>
                                                         </label>
                                                     )}
                                                     <input
@@ -394,104 +418,212 @@ export default function StockManagement() {
                                                         id="create-image"
                                                         type="file"
                                                         accept="image/*"
-                                                        onChange={handleCreateImageChange}
+                                                        onChange={
+                                                            handleCreateImageChange
+                                                        }
                                                         className="hidden"
                                                     />
                                                 </div>
                                                 {createForm.errors.image && (
-                                                    <p className="text-sm text-red-500">{createForm.errors.image}</p>
+                                                    <p className="text-sm text-red-500">
+                                                        {
+                                                            createForm.errors
+                                                                .image
+                                                        }
+                                                    </p>
                                                 )}
                                             </div>
 
-                                            <span className='grid gap-2 flex-grow'>
+                                            <span className="grid flex-grow gap-2">
                                                 <div className="grid gap-2">
                                                     <Label htmlFor="create-name">
-                                                        Nama Barang <span className="text-red-500">*</span>
+                                                        Nama Barang{' '}
+                                                        <span className="text-red-500">
+                                                            *
+                                                        </span>
                                                     </Label>
                                                     <Input
                                                         id="create-name"
-                                                        value={createForm.data.name}
-                                                        onChange={(e) => createForm.setData('name', e.target.value)}
+                                                        value={
+                                                            createForm.data.name
+                                                        }
+                                                        onChange={(e) =>
+                                                            createForm.setData(
+                                                                'name',
+                                                                e.target.value,
+                                                            )
+                                                        }
                                                         placeholder="Contoh: Yamalube Oil Sport"
                                                     />
                                                     {createForm.errors.name && (
-                                                        <p className="text-sm text-red-500">{createForm.errors.name}</p>
+                                                        <p className="text-sm text-red-500">
+                                                            {
+                                                                createForm
+                                                                    .errors.name
+                                                            }
+                                                        </p>
                                                     )}
                                                 </div>
                                                 <div className="grid gap-2">
                                                     <Label htmlFor="create-category">
-                                                        Kategori <span className="text-red-500">*</span>
+                                                        Kategori{' '}
+                                                        <span className="text-red-500">
+                                                            *
+                                                        </span>
                                                     </Label>
                                                     <Input
                                                         id="create-category"
-                                                        value={createForm.data.category}
-                                                        onChange={(e) => createForm.setData('category', e.target.value)}
+                                                        value={
+                                                            createForm.data
+                                                                .category
+                                                        }
+                                                        onChange={(e) =>
+                                                            createForm.setData(
+                                                                'category',
+                                                                e.target.value,
+                                                            )
+                                                        }
                                                         placeholder="Contoh: Oli Mesin 4 Tak"
                                                     />
-                                                    {createForm.errors.category && (
-                                                        <p className="text-sm text-red-500">{createForm.errors.category}</p>
+                                                    {createForm.errors
+                                                        .category && (
+                                                        <p className="text-sm text-red-500">
+                                                            {
+                                                                createForm
+                                                                    .errors
+                                                                    .category
+                                                            }
+                                                        </p>
                                                     )}
                                                 </div>
                                             </span>
                                         </span>
                                         <div className="grid grid-cols-2 gap-4">
                                             <div className="grid gap-2">
-                                                <Label htmlFor="create-original-price">Harga Awal (Rp) <span className="text-red-500">*</span></Label>
+                                                <Label htmlFor="create-original-price">
+                                                    Harga Awal (Rp){' '}
+                                                    <span className="text-red-500">
+                                                        *
+                                                    </span>
+                                                </Label>
                                                 <Input
                                                     id="create-original-price"
                                                     type="number"
-                                                    value={createForm.data.original_price}
-                                                    onChange={(e) => createForm.setData('original_price', e.target.value)}
+                                                    value={
+                                                        createForm.data
+                                                            .original_price
+                                                    }
+                                                    onChange={(e) =>
+                                                        createForm.setData(
+                                                            'original_price',
+                                                            e.target.value,
+                                                        )
+                                                    }
                                                     placeholder="65000"
                                                 />
-                                                {createForm.errors.original_price && (
-                                                    <p className="text-sm text-red-500">{createForm.errors.original_price}</p>
+                                                {createForm.errors
+                                                    .original_price && (
+                                                    <p className="text-sm text-red-500">
+                                                        {
+                                                            createForm.errors
+                                                                .original_price
+                                                        }
+                                                    </p>
                                                 )}
                                             </div>
                                             <div className="grid gap-2">
-                                                <Label htmlFor="create-price">Harga Diskon (Rp)</Label>
+                                                <Label htmlFor="create-price">
+                                                    Harga Diskon (Rp)
+                                                </Label>
                                                 <Input
                                                     id="create-price"
                                                     type="number"
-                                                    value={createForm.data.price}
-                                                    onChange={(e) => createForm.setData('price', e.target.value)}
+                                                    value={
+                                                        createForm.data.price
+                                                    }
+                                                    onChange={(e) =>
+                                                        createForm.setData(
+                                                            'price',
+                                                            e.target.value,
+                                                        )
+                                                    }
                                                     placeholder="65000"
                                                 />
                                                 {createForm.errors.price && (
-                                                    <p className="text-sm text-red-500">{createForm.errors.price}</p>
+                                                    <p className="text-sm text-red-500">
+                                                        {
+                                                            createForm.errors
+                                                                .price
+                                                        }
+                                                    </p>
                                                 )}
                                             </div>
                                         </div>
                                         <div className="grid grid-cols-2 gap-4">
                                             <div className="grid gap-2">
-                                                <Label htmlFor="create-stock">Stok <span className="text-red-500">*</span></Label>
+                                                <Label htmlFor="create-stock">
+                                                    Stok{' '}
+                                                    <span className="text-red-500">
+                                                        *
+                                                    </span>
+                                                </Label>
                                                 <Input
                                                     id="create-stock"
                                                     type="number"
-                                                    value={createForm.data.stock}
-                                                    onChange={(e) => createForm.setData('stock', e.target.value)}
+                                                    value={
+                                                        createForm.data.stock
+                                                    }
+                                                    onChange={(e) =>
+                                                        createForm.setData(
+                                                            'stock',
+                                                            e.target.value,
+                                                        )
+                                                    }
                                                     placeholder="0"
                                                 />
                                                 {createForm.errors.stock && (
-                                                    <p className="text-sm text-red-500">{createForm.errors.stock}</p>
+                                                    <p className="text-sm text-red-500">
+                                                        {
+                                                            createForm.errors
+                                                                .stock
+                                                        }
+                                                    </p>
                                                 )}
                                             </div>
                                             <div className="grid gap-2">
-                                                <Label htmlFor="create-brand">Brand</Label>
+                                                <Label htmlFor="create-brand">
+                                                    Brand
+                                                </Label>
                                                 <Input
                                                     id="create-brand"
-                                                    value={createForm.data.brand}
-                                                    onChange={(e) => createForm.setData('brand', e.target.value)}
+                                                    value={
+                                                        createForm.data.brand
+                                                    }
+                                                    onChange={(e) =>
+                                                        createForm.setData(
+                                                            'brand',
+                                                            e.target.value,
+                                                        )
+                                                    }
                                                     placeholder="Contoh: Yamaha"
                                                 />
                                             </div>
                                         </div>
                                         <div className="grid gap-2">
-                                            <Label htmlFor="create-description">Deskripsi</Label>
+                                            <Label htmlFor="create-description">
+                                                Deskripsi
+                                            </Label>
                                             <Textarea
                                                 id="create-description"
-                                                value={createForm.data.description}
-                                                onChange={(e) => createForm.setData('description', e.target.value)}
+                                                value={
+                                                    createForm.data.description
+                                                }
+                                                onChange={(e) =>
+                                                    createForm.setData(
+                                                        'description',
+                                                        e.target.value,
+                                                    )
+                                                }
                                             />
                                         </div>
                                     </div>
@@ -499,11 +631,13 @@ export default function StockManagement() {
                                         <Button
                                             type="button"
                                             variant="outline"
-                                            onClick={() => handleAddDialogChange(false)}
+                                            onClick={() =>
+                                                handleAddDialogChange(false)
+                                            }
                                         >
                                             Batal
                                         </Button>
-                                        <Button 
+                                        <Button
                                             type="submit"
                                             disabled={createForm.processing}
                                             className="bg-blue-600 hover:bg-blue-700"
@@ -524,7 +658,7 @@ export default function StockManagement() {
                     </div>
 
                     {/* Search & Filter Toolbar */}
-                     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between dark:bg-slate-900">
+                    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between dark:bg-slate-900">
                         {/* Search */}
                         <div className="relative w-full lg:max-w-md">
                             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -550,7 +684,7 @@ export default function StockManagement() {
                                         : 'secondary'
                                 }
                                 size="sm"
-                                className={`cursor-pointer  rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
+                                className={`cursor-pointer rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
                                     statusFilter === 'all'
                                         ? 'bg-blue-600 text-white shadow-sm'
                                         : 'border bg-card text-muted-foreground hover:bg-muted'
@@ -566,11 +700,11 @@ export default function StockManagement() {
                                         : 'secondary'
                                 }
                                 size="sm"
-                               className={`cursor-pointer  rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
-                                        statusFilter === 'tersedia'
-                                            ? 'bg-blue-600 text-white shadow-sm'
-                                            : 'border bg-card text-muted-foreground hover:bg-muted'
-                                    }`}
+                                className={`cursor-pointer rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
+                                    statusFilter === 'tersedia'
+                                        ? 'bg-blue-600 text-white shadow-sm'
+                                        : 'border bg-card text-muted-foreground hover:bg-muted'
+                                }`}
                                 onClick={() => setStatusFilter('tersedia')}
                             >
                                 Tersedia
@@ -582,11 +716,11 @@ export default function StockManagement() {
                                         : 'secondary'
                                 }
                                 size="sm"
-                                className={`cursor-pointer  rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
-                                        statusFilter === 'menipis'
-                                            ? 'bg-blue-600 text-white shadow-sm'
-                                            : 'border bg-card text-muted-foreground hover:bg-muted'
-                                    }`}
+                                className={`cursor-pointer rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
+                                    statusFilter === 'menipis'
+                                        ? 'bg-blue-600 text-white shadow-sm'
+                                        : 'border bg-card text-muted-foreground hover:bg-muted'
+                                }`}
                                 onClick={() => setStatusFilter('menipis')}
                             >
                                 Stok Menipis
@@ -598,11 +732,11 @@ export default function StockManagement() {
                                         : 'secondary'
                                 }
                                 size="sm"
-                                className={`cursor-pointer  rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
-                                        statusFilter === 'habis'
-                                            ? 'bg-blue-600 text-white shadow-sm'
-                                            : 'border bg-card text-muted-foreground hover:bg-muted'
-                                    }`}
+                                className={`cursor-pointer rounded-lg px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
+                                    statusFilter === 'habis'
+                                        ? 'bg-blue-600 text-white shadow-sm'
+                                        : 'border bg-card text-muted-foreground hover:bg-muted'
+                                }`}
                                 onClick={() => setStatusFilter('habis')}
                             >
                                 Habis
@@ -702,7 +836,7 @@ export default function StockManagement() {
                                                     <Button
                                                         variant="ghost"
                                                         size="icon"
-                                                        className="h-8 w-8 text-slate-400 bg-red-50 text-red-600 dark:text-slate-500 hover:bg-red-100 hover:text-red-700"
+                                                        className="h-8 w-8 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 dark:text-slate-500"
                                                         onClick={() =>
                                                             openDeleteDialog(
                                                                 product,
@@ -726,7 +860,9 @@ export default function StockManagement() {
                                 {/* Previous Button */}
                                 <PaginationItem>
                                     <PaginationPrevious
-                                        href={buildPaginationUrl(products.current_page - 1)}
+                                        href={buildPaginationUrl(
+                                            products.current_page - 1,
+                                        )}
                                         className={
                                             products.current_page === 1
                                                 ? 'pointer-events-none opacity-50'
@@ -773,7 +909,9 @@ export default function StockManagement() {
                                         ) : (
                                             <PaginationItem key={page}>
                                                 <PaginationLink
-                                                    href={buildPaginationUrl(page)}
+                                                    href={buildPaginationUrl(
+                                                        page,
+                                                    )}
                                                     isActive={page === current}
                                                     className="cursor-pointer"
                                                 >
@@ -787,9 +925,12 @@ export default function StockManagement() {
                                 {/* Next Button */}
                                 <PaginationItem>
                                     <PaginationNext
-                                        href={buildPaginationUrl(products.current_page + 1)}
+                                        href={buildPaginationUrl(
+                                            products.current_page + 1,
+                                        )}
                                         className={
-                                            products.current_page === products.last_page
+                                            products.current_page ===
+                                            products.last_page
                                                 ? 'pointer-events-none opacity-50'
                                                 : 'cursor-pointer'
                                         }
@@ -802,7 +943,10 @@ export default function StockManagement() {
             </div>
 
             {/* Edit Dialog */}
-            <Dialog open={isEditDialogOpen} onOpenChange={handleEditDialogChange}>
+            <Dialog
+                open={isEditDialogOpen}
+                onOpenChange={handleEditDialogChange}
+            >
                 <DialogContent className="sm:max-w-[500px]">
                     <form onSubmit={handleEditProduct}>
                         <DialogHeader>
@@ -813,7 +957,7 @@ export default function StockManagement() {
                         </DialogHeader>
 
                         <div className="grid gap-4 py-4">
-                            <span className='flex gap-2 lg:gap-4 flex-col lg:flex-row'>
+                            <span className="flex flex-col gap-2 lg:flex-row lg:gap-4">
                                 {/* Image Upload */}
                                 <div className="grid gap-2">
                                     <Label>Gambar Produk</Label>
@@ -823,7 +967,7 @@ export default function StockManagement() {
                                                 <img
                                                     src={editImagePreview}
                                                     alt="Preview"
-                                                    className="h-24 w-24 rounded-lg object-cover border border-slate-200 dark:border-slate-700"
+                                                    className="h-24 w-24 rounded-lg border border-slate-200 object-cover dark:border-slate-700"
                                                 />
                                                 <button
                                                     type="button"
@@ -839,7 +983,9 @@ export default function StockManagement() {
                                                 className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-300 bg-slate-50 hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800 dark:hover:bg-slate-700"
                                             >
                                                 <ImagePlus className="h-8 w-8 text-slate-400" />
-                                                <span className="mt-1 text-xs text-slate-500">Upload</span>
+                                                <span className="mt-1 text-xs text-slate-500">
+                                                    Upload
+                                                </span>
                                             </label>
                                         )}
                                         <input
@@ -852,81 +998,132 @@ export default function StockManagement() {
                                         />
                                     </div>
                                     {editForm.errors.image && (
-                                        <p className="text-sm text-red-500">{editForm.errors.image}</p>
+                                        <p className="text-sm text-red-500">
+                                            {editForm.errors.image}
+                                        </p>
                                     )}
                                 </div>
 
-                                <span className='grid gap-2 flex-grow'>
+                                <span className="grid flex-grow gap-2">
                                     <div className="grid gap-2">
-                                <Label htmlFor="edit-name">
-                                    Nama Barang <span className="text-red-500">*</span>
-                                </Label>
-                                <Input
-                                    id="edit-name"
-                                    value={editForm.data.name}
-                                    onChange={(e) => editForm.setData('name', e.target.value)}
-                                    placeholder="Contoh: Yamalube Oil Sport"
-                                />
-                                {editForm.errors.name && (
-                                    <p className="text-sm text-red-500">{editForm.errors.name}</p>
-                                )}
+                                        <Label htmlFor="edit-name">
+                                            Nama Barang{' '}
+                                            <span className="text-red-500">
+                                                *
+                                            </span>
+                                        </Label>
+                                        <Input
+                                            id="edit-name"
+                                            value={editForm.data.name}
+                                            onChange={(e) =>
+                                                editForm.setData(
+                                                    'name',
+                                                    e.target.value,
+                                                )
+                                            }
+                                            placeholder="Contoh: Yamalube Oil Sport"
+                                        />
+                                        {editForm.errors.name && (
+                                            <p className="text-sm text-red-500">
+                                                {editForm.errors.name}
+                                            </p>
+                                        )}
                                     </div>
                                     <div className="grid gap-2">
                                         <Label htmlFor="edit-category">
-                                            Kategori <span className="text-red-500">*</span>
+                                            Kategori{' '}
+                                            <span className="text-red-500">
+                                                *
+                                            </span>
                                         </Label>
                                         <Input
                                             id="edit-category"
                                             value={editForm.data.category}
-                                            onChange={(e) => editForm.setData('category', e.target.value)}
+                                            onChange={(e) =>
+                                                editForm.setData(
+                                                    'category',
+                                                    e.target.value,
+                                                )
+                                            }
                                             placeholder="Contoh: Oli Mesin 4 Tak"
                                         />
                                         {editForm.errors.category && (
-                                            <p className="text-sm text-red-500">{editForm.errors.category}</p>
+                                            <p className="text-sm text-red-500">
+                                                {editForm.errors.category}
+                                            </p>
                                         )}
                                     </div>
                                 </span>
                             </span>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">
-                                    <Label htmlFor="edit-original-price">Harga (Rp) <span className="text-red-500">*</span></Label>
+                                    <Label htmlFor="edit-original-price">
+                                        Harga (Rp){' '}
+                                        <span className="text-red-500">*</span>
+                                    </Label>
                                     <Input
                                         id="edit-original-price"
                                         type="number"
                                         value={editForm.data.original_price}
-                                        onChange={(e) => editForm.setData('original_price', e.target.value)}
+                                        onChange={(e) =>
+                                            editForm.setData(
+                                                'original_price',
+                                                e.target.value,
+                                            )
+                                        }
                                         placeholder="65000"
                                     />
                                     {editForm.errors.original_price && (
-                                        <p className="text-sm text-red-500">{editForm.errors.original_price}</p>
+                                        <p className="text-sm text-red-500">
+                                            {editForm.errors.original_price}
+                                        </p>
                                     )}
                                 </div>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="edit-price">Harga Diskon(Rp)</Label>
+                                    <Label htmlFor="edit-price">
+                                        Harga Diskon(Rp)
+                                    </Label>
                                     <Input
                                         id="edit-price"
                                         type="number"
                                         value={editForm.data.price}
-                                        onChange={(e) => editForm.setData('price', e.target.value)}
+                                        onChange={(e) =>
+                                            editForm.setData(
+                                                'price',
+                                                e.target.value,
+                                            )
+                                        }
                                         placeholder="65000"
                                     />
                                     {editForm.errors.price && (
-                                        <p className="text-sm text-red-500">{editForm.errors.price}</p>
+                                        <p className="text-sm text-red-500">
+                                            {editForm.errors.price}
+                                        </p>
                                     )}
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-4">
-                                 <div className="grid gap-2">
-                                    <Label htmlFor="edit-stock">Stok <span className="text-red-500">*</span></Label>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="edit-stock">
+                                        Stok{' '}
+                                        <span className="text-red-500">*</span>
+                                    </Label>
                                     <Input
                                         id="edit-stock"
                                         type="number"
                                         value={editForm.data.stock}
-                                        onChange={(e) => editForm.setData('stock', e.target.value)}
+                                        onChange={(e) =>
+                                            editForm.setData(
+                                                'stock',
+                                                e.target.value,
+                                            )
+                                        }
                                         placeholder="0"
                                     />
                                     {editForm.errors.stock && (
-                                        <p className="text-sm text-red-500">{editForm.errors.stock}</p>
+                                        <p className="text-sm text-red-500">
+                                            {editForm.errors.stock}
+                                        </p>
                                     )}
                                 </div>
                                 <div className="grid gap-2">
@@ -934,17 +1131,29 @@ export default function StockManagement() {
                                     <Input
                                         id="edit-brand"
                                         value={editForm.data.brand}
-                                        onChange={(e) => editForm.setData('brand', e.target.value)}
+                                        onChange={(e) =>
+                                            editForm.setData(
+                                                'brand',
+                                                e.target.value,
+                                            )
+                                        }
                                         placeholder="Contoh: Yamaha"
                                     />
                                 </div>
                             </div>
                             <div className="grid gap-2">
-                                <Label htmlFor="edit-description">Deskripsi</Label>
+                                <Label htmlFor="edit-description">
+                                    Deskripsi
+                                </Label>
                                 <Textarea
                                     id="edit-description"
                                     value={editForm.data.description}
-                                    onChange={(e) => editForm.setData('description', e.target.value)}
+                                    onChange={(e) =>
+                                        editForm.setData(
+                                            'description',
+                                            e.target.value,
+                                        )
+                                    }
                                 />
                             </div>
                         </div>
@@ -956,7 +1165,7 @@ export default function StockManagement() {
                             >
                                 Batal
                             </Button>
-                            <Button 
+                            <Button
                                 type="submit"
                                 disabled={editForm.processing}
                                 className="bg-blue-600 hover:bg-blue-700"
@@ -976,7 +1185,10 @@ export default function StockManagement() {
             </Dialog>
 
             {/* Delete Confirmation AlertDialog */}
-            <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+            <AlertDialog
+                open={isDeleteDialogOpen}
+                onOpenChange={setIsDeleteDialogOpen}
+            >
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>Hapus Barang</AlertDialogTitle>
@@ -988,7 +1200,9 @@ export default function StockManagement() {
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel onClick={() => setIsDeleteDialogOpen(false)}>
+                        <AlertDialogCancel
+                            onClick={() => setIsDeleteDialogOpen(false)}
+                        >
                             Batal
                         </AlertDialogCancel>
                         <AlertDialogAction
