@@ -20,7 +20,7 @@ RUN apt-get update \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
-COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.8 /usr/bin/composer /usr/bin/composer
 
 # Copy existing application directory contents
 COPY . /var/www
