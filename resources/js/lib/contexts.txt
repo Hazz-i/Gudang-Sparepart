@@ -10,11 +10,10 @@ FLOW BOOKING SPAREPART:
    - Klik produk untuk melihat detail (harga, stok, spesifikasi)
    - Klik tombol "Booking Sekarang" pada halaman detail produk
 
-2. PILIH METODE PEMBAYARAN
-   - Pilih metode pembayaran yang tersedia:
-     * Transfer Bank (BCA, BNI, BRI, Mandiri)
-     * E-Wallet (GoPay, OVO, Dana)
+2. SCAN QRIS
    - Isi data diri (nama, email, nomor telepon)
+   - Scan QRIS untuk melakukan pembayaran
+   - Uppload bukti pembayaran
    - Konfirmasi pesanan
 
 3. TUNGGU KONFIRMASI PEMBAYARAN
@@ -26,7 +25,7 @@ FLOW BOOKING SPAREPART:
 4. DAPATKAN NOMOR BOOKING
    - Setelah pembayaran dikonfirmasi, Anda akan menerima email konfirmasi
    - Email berisi:
-     * Nomor Booking (format: SPB-XXXX-XXXX)
+     * Nomor / Kode Booking (format: SPB-XXXX-XXXX)
      * Detail produk yang dipesan
      * Alamat toko untuk pengambilan
      * Batas waktu pengambilan

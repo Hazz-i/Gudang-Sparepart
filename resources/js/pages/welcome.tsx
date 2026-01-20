@@ -58,7 +58,7 @@ const steps = [
         icon: CreditCardIcon,
         title: '2. Checkout & Bayar',
         description:
-            'Isi data diri dan pilih metode pembayaran. Upload bukti transfer jika sudah bayar, atau pilih COD untuk bayar di tempat.',
+            'Isi data diri dan pilih metode pembayaran. Upload bukti transfer jika sudah bayar.',
     },
     {
         icon: ClipboardCheckIcon,
@@ -112,7 +112,7 @@ export default function Welcome() {
                                         <Button
                                             size="lg"
                                             className="h-12 rounded-xl bg-blue-600 text-white hover:bg-blue-700"
-                                    >
+                                        >
                                             Lihat Sparepart
                                         </Button>
                                     </Link>
@@ -134,26 +134,27 @@ export default function Welcome() {
                 </section>
 
                 {/* Popular Categories Section */}
-                <section className="bg-card py-12 px-4">
+                <section className="bg-card px-4 py-12">
                     <div className="mx-auto max-w-[1280px]">
                         <div className="flex items-center justify-between pt-2 pb-6">
-                            <h2 className="text-[22px] lg:text-[28px] leading-tight font-bold tracking-tight">
+                            <h2 className="text-[22px] leading-tight font-bold tracking-tight lg:text-[28px]">
                                 Daftar Sparepart Terbaru
                             </h2>
                             <Link
-                                className={`items-center gap-1 text-sm font-semibold text-blue-600 hover:underline ${products ?  (products?.length < 8 ? 'hidden' : 'flex') : 'hidden'}`}
+                                className={`items-center gap-1 text-sm font-semibold text-blue-600 hover:underline ${products ? (products?.length < 8 ? 'hidden' : 'flex') : 'hidden'}`}
                                 href="/products"
                             >
-                                Lihat Semua <ArrowRightIcon className="w-4 h-4" />
+                                Lihat Semua{' '}
+                                <ArrowRightIcon className="h-4 w-4" />
                             </Link>
                         </div>
 
                         {products?.length === 0 && (
-                        <p className="text-center text-muted-foreground py-30">
-                            Tidak ada produk yang ditemukan
-                        </p>
+                            <p className="py-30 text-center text-muted-foreground">
+                                Tidak ada produk yang ditemukan
+                            </p>
                         )}
-                        <div className="grid grid-cols-2 gap-2 lg:gap-6 lg:grid-cols-3 xl:grid-cols-4">
+                        <div className="grid grid-cols-2 gap-2 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
                             {products?.map((product: Product) => (
                                 <ProductCard
                                     key={product.id}
@@ -165,14 +166,14 @@ export default function Welcome() {
                 </section>
 
                 {/* How It Works Section */}
-                <section className="py-16 px-4">
+                <section className="px-4 py-16">
                     <div className="mx-auto max-w-[1280px]">
                         <div className="flex flex-col gap-10">
                             <div className="flex flex-col gap-4 text-center md:text-left">
-                                <h2 className="text-[22px] lg:text-[32px] leading-tight font-black tracking-tight sm:text-4xl">
+                                <h2 className="text-[22px] leading-tight font-black tracking-tight sm:text-4xl lg:text-[32px]">
                                     Cara Booking Sparepart
                                 </h2>
-                                <p className="max-w-[720px] lg:max-w-[920px] lg:text-lg text-muted-foreground">
+                                <p className="max-w-[720px] text-muted-foreground lg:max-w-[920px] lg:text-lg">
                                     Dapatkan sparepart Anda dalam 4 langkah
                                     mudah. Reservasi online, ambil di toko tanpa
                                     antri.
@@ -187,7 +188,7 @@ export default function Welcome() {
                                     >
                                         <CardContent className="flex flex-col gap-6 p-8">
                                             <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600">
-                                                <step.icon className="w-6 h-6" />
+                                                <step.icon className="h-6 w-6" />
                                             </div>
                                             <div className="flex flex-col gap-2">
                                                 <h3 className="text-xl font-bold">
@@ -210,7 +211,7 @@ export default function Welcome() {
                     <div className="mx-auto max-w-[1280px] px-4">
                         <Card className="overflow-hidden border-0 bg-gradient-to-br from-blue-600 via-blue-600 to-blue-700 shadow-2xl shadow-blue-600/20">
                             <CardContent className="p-0">
-                                <div className="grid lg:gap-8 lg:grid-cols-2 lg:gap-0">
+                                <div className="grid lg:grid-cols-2 lg:gap-8">
                                     {/* Left Content */}
                                     <div className="flex flex-col justify-center gap-6 p-8 lg:p-12">
                                         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur">
@@ -229,7 +230,7 @@ export default function Welcome() {
                                         <Link href="/booking-status">
                                             <Button
                                                 size="lg"
-                                                className="h-12 w-full lg:w-fit rounded-xl bg-white px-6 font-semibold text-blue-600 shadow-lg transition-all hover:bg-blue-50 hover:shadow-xl"
+                                                className="h-12 w-full rounded-xl bg-white px-6 font-semibold text-blue-600 shadow-lg transition-all hover:bg-blue-50 hover:shadow-xl lg:w-fit"
                                             >
                                                 <SearchIcon className="mr-2 h-5 w-5" />
                                                 Cek Status Booking
@@ -246,7 +247,7 @@ export default function Welcome() {
                                             {statusInfo.map((item) => (
                                                 <Card
                                                     key={item.status}
-                                                    className="bg-white/10 transition-shadow hover:shadow-md border-none"
+                                                    className="border-none bg-white/10 transition-shadow hover:shadow-md"
                                                 >
                                                     <CardContent className="flex items-center gap-4 p-4">
                                                         <div
