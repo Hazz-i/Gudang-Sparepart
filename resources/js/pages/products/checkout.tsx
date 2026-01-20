@@ -500,7 +500,7 @@ export default function Checkout() {
             </div>
 
             <Toaster
-                position="top-center"
+                position="top-right"
                 toastOptions={{
                     duration: 4000,
                     style: {
