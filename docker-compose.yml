@@ -21,6 +21,12 @@ services:
     command: |
       sh -c "
         echo '🚀 Starting Gudang Sparepart...' &&
+        if [ ! -f /var/www/.env ]; then
+          echo '⚙️  .env not found, creating from .env.example...' &&
+          cp /var/www/.env.example /var/www/.env &&
+          php artisan key:generate --force &&
+          echo '✅ APP_KEY generated!'
+        fi &&
         php artisan config:cache &&
         php artisan route:cache &&
         php artisan view:cache &&
