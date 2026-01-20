@@ -36,10 +36,10 @@ first_time_setup() {
     echo_info "Setting up for the first time..."
     
     # Build image
-    docker-compose build --no-cache
+    docker compose build --no-cache
     
     # Start containers
-    docker-compose up -d
+    docker compose up -d
     
     # Wait for container to be ready
     sleep 5
@@ -53,21 +53,21 @@ first_time_setup() {
 # Function: Start aplikasi (jika sudah pernah setup)
 start() {
     echo_info "Starting containers..."
-    docker-compose up -d
+    docker compose up -d
     echo_success "Containers started!"
 }
 
 # Function: Stop aplikasi
 stop() {
     echo_info "Stopping containers..."
-    docker-compose down
+    docker compose down
     echo_success "Containers stopped!"
 }
 
 # Function: Restart aplikasi
 restart() {
     echo_info "Restarting containers..."
-    docker-compose restart
+    docker compose restart
     echo_success "Containers restarted!"
 }
 
@@ -90,7 +90,7 @@ update_code() {
     docker exec $CONTAINER_NAME php artisan view:cache
     
     # Restart PHP-FPM
-    docker-compose restart
+    docker compose restart
     
     echo_success "Code updated successfully!"
 }
@@ -100,16 +100,16 @@ rebuild() {
     echo_warning "Rebuilding image (this will take a while)..."
     
     # Stop containers
-    docker-compose down
+    docker compose down
     
     # Remove old image
     docker rmi ${PROJECT_NAME}_app 2>/dev/null || true
     
     # Build new image
-    docker-compose build --no-cache
+    docker compose build --no-cache
     
     # Start containers
-    docker-compose up -d
+    docker compose up -d
     
     echo_success "Rebuild completed!"
 }
@@ -119,7 +119,7 @@ cleanup() {
     echo_warning "Cleaning up old containers and images..."
     
     # Stop and remove containers
-    docker-compose down
+    docker compose down
     
     # Remove unused images
     docker image prune -f
@@ -132,7 +132,7 @@ cleanup() {
 
 # Function: Logs
 logs() {
-    docker-compose logs -f --tail=100
+    docker compose logs -f --tail=100
 }
 
 # Function: Laravel logs
@@ -143,7 +143,7 @@ laravel_logs() {
 # Function: Status
 status() {
     echo_info "Container Status:"
-    docker-compose ps
+    docker compose ps
 }
 
 # Function: Shell access
