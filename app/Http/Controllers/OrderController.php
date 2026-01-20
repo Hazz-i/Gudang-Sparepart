@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Product;
+use App\Rules\ValidEmail;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
 class OrderController extends Controller
@@ -31,7 +33,7 @@ class OrderController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => ['required', 'email', 'max:255', new ValidEmail()],
             'phone' => 'nullable|string|max:20',
             'quantity' => 'required|integer|min:1',
             'product_id' => 'required|exists:products,id',
@@ -79,6 +81,35 @@ class OrderController extends Controller
             $product->update(['status' => 'out_of_stock']);
         } elseif ($product->stock <= 10) {
             $product->update(['status' => 'low_stock']);
+        }
+
+        // Prepare invoice data
+        $invoiceNumber = 'INV-' . now()->format('Ymd') . '-' . strtoupper(substr(uniqid(), -5));
+        $invoiceData = [
+            'invoiceNumber' => $invoiceNumber,
+            'bookingCode' => $bookingCode,
+            'customerName' => $validated['name'],
+            'customerEmail' => $validated['email'],
+            'customerPhone' => $validated['phone'] ?? '-',
+            'productName' => $product->name,
+            'productBrand' => $product->brand ?? '-',
+            'quantity' => $validated['quantity'],
+            'pricePerUnit' => $product->price,
+            'totalPrice' => $order->total_price,
+            'paymentMethod' => 'QRIS',
+            'orderDate' => now()->format('d F Y, H:i'),
+            'status' => 'Pending',
+        ];
+
+        // Send invoice email
+        try {
+            Mail::send('emails.invoice', $invoiceData, function ($message) use ($validated, $invoiceNumber) {
+                $message->to($validated['email'], $validated['name'])
+                        ->from(config('mail.from.address', 'noreply@gudangsparepart.com'), 'Gudang Spareparts')
+                        ->subject('Invoice Pembayaran - ' . $invoiceNumber);
+            });
+        } catch (\Exception $e) {
+            \Log::error('Failed to send invoice email: ' . $e->getMessage());
         }
 
         return redirect()->route('booking.status')->with([
