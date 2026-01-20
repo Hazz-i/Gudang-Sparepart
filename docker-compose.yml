@@ -26,7 +26,14 @@ services:
         php artisan view:cache &&
         php artisan storage:link &&
         php artisan migrate --force &&
-        php artisan db:seed --force &&
-        echo '✅ Migrations and seeding completed!' &&
+        if [ ! -f /var/www/storage/.seeded ]; then
+          echo '🌱 Running seeder for the first time...' &&
+          php artisan db:seed --force &&
+          touch /var/www/storage/.seeded &&
+          echo '✅ Seeding completed! Flag created.'
+        else
+          echo '⏭️  Database already seeded, skipping seeder...'
+        fi &&
+        echo '✅ Application ready!' &&
         php-fpm
       "
