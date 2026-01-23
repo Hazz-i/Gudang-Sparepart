@@ -6,11 +6,9 @@ Aplikasi manajemen gudang sparepart yang dibangun dengan **Laravel 12** (Backend
 
 - **Backend:** Laravel 12 (PHP 8.2+)
 - **Frontend:** React 19 + TypeScript
-- **UI Framework:** Tailwind CSS 4 + Radix UI
-- **State Management:** TanStack Query
 - **Routing:** Inertia.js
 - **Authentication:** Laravel Fortify
-- **Database:** MySQL/PostgreSQL
+- **Database:** MySQL
 - **Build Tool:** Vite
 - **Containerization:** Docker
 
