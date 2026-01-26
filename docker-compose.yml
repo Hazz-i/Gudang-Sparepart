@@ -6,12 +6,17 @@ services:
     container_name: gudang-sparepart-app
     working_dir: /var/www
     volumes:
-      # For Deployment on My Zima OS Server
-      - /DATA/AppData/gudang-sparepart:/var/www
-      - /DATA/AppData/gudang-sparepart/storage/app:/var/www/storage/app
-      - /DATA/AppData/gudang-sparepart/storage/logs:/var/www/storage/logs
-      - /DATA/AppData/gudang-sparepart/vendor:/var/www/vendor
-      - /DATA/AppData/gudang-sparepart/node_modules:/var/www/resources/js/node_modules
+      # # For Deployment on My Zima OS Server
+      # - /DATA/AppData/gudang-sparepart:/var/www
+      # - /DATA/AppData/gudang-sparepart/storage/app:/var/www/storage/app
+      # - /DATA/AppData/gudang-sparepart/storage/logs:/var/www/storage/logs
+      # - /DATA/AppData/gudang-sparepart/vendor:/var/www/vendor
+      # - /DATA/AppData/gudang-sparepart/node_modules:/var/www/resources/js/node_modules
+      - ./:/var/www
+      - ./storage/app:/var/www/storage/app
+      - ./storage/logs:/var/www/storage/logs
+      - ./vendor:/var/www/vendor
+      - ./node_modules:/var/www/resources/js/node_modules
     ports:
       - '9090:9090' # PHP-FPM
       - '5173:5173' # Vite dev server (if needed)
