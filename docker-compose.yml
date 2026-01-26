@@ -5,7 +5,8 @@ services:
     build: .
     container_name: gudang-sparepart-app
     working_dir: /var/www
-    volumes: # For Deployment on My Zima OS Server
+    volumes:
+      # For Deployment on My Zima OS Server
       - /DATA/AppData/gudang-sparepart:/var/www
       - /DATA/AppData/gudang-sparepart/storage/app:/var/www/storage/app
       - /DATA/AppData/gudang-sparepart/storage/logs:/var/www/storage/logs
@@ -16,30 +17,3 @@ services:
       - '5173:5173' # Vite dev server (if needed)
     env_file:
       - .env
-    depends_on:
-
-    command: |
-      sh -c "
-        echo '🚀 Starting Gudang Sparepart...' &&
-        if [ ! -f /var/www/.env ]; then
-          echo '⚙️  .env not found, creating from .env.example...' &&
-          cp /var/www/.env.example /var/www/.env &&
-          php artisan key:generate --force &&
-          echo '✅ APP_KEY generated!'
-        fi &&
-        php artisan config:cache &&
-        php artisan route:cache &&
-        php artisan view:cache &&
-        php artisan storage:link &&
-        php artisan migrate --force &&
-        if [ ! -f /var/www/storage/.seeded ]; then
-          echo '🌱 Running seeder for the first time...' &&
-          php artisan db:seed --force &&
-          touch /var/www/storage/.seeded &&
-          echo '✅ Seeding completed! Flag created.'
-        else
-          echo '⏭️  Database already seeded, skipping seeder...'
-        fi &&
-        echo '✅ Application ready!' &&
-        php-fpm
-      "
