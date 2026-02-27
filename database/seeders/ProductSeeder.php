@@ -12,10 +12,7 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        $categories = ['Komponen Mesin', 'Sistem Rem', 'Kelistrikan', 'Suspensi', 'Transmisi', 'Body Parts', 'Filter', 'Lampu'];
         $brands = ['Bosch', 'Denso', 'NGK', 'Aisin', 'Continental', 'Valeo', 'Delphi', 'Mahle', 'ACDelco', 'Brembo'];
-        $materials = ['Baja', 'Aluminium', 'Karet', 'Plastik', 'Tembaga', 'Serat Karbon', 'Besi Tuang'];
-        $warranties = ['6 bulan', '1 tahun', '2 tahun', '3 tahun', 'Seumur Hidup'];
 
         $products = [
             ['name' => 'Kampas Rem Set', 'category' => 'Sistem Rem'],
@@ -68,9 +65,6 @@ class ProductSeeder extends Seeder
                 'image_url' => 'https://picsum.photos/seed/' . ($index + 1) . '/400/400',
                 'category' => $product['category'],
                 'brand' => fake()->randomElement($brands),
-                'material' => fake()->randomElement($materials),
-                'weight' => fake()->randomFloat(2, 0.1, 50),
-                'warranty' => fake()->randomElement($warranties),
             ]);
         }
     }

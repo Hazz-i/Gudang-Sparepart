@@ -168,26 +168,10 @@ export default function ProductShow() {
                                     <div className="grid grid-cols-1 gap-x-8 gap-y-4 text-sm sm:grid-cols-2">
                                         <div className="flex justify-between border-b pb-2">
                                             <span className="text-muted-foreground">
-                                                Garansi
-                                            </span>
-                                            <span className="font-medium">
-                                                {product.warranty}
-                                            </span>
-                                        </div>
-                                        <div className="flex justify-between border-b pb-2">
-                                            <span className="text-muted-foreground">
                                                 Kategori
                                             </span>
                                             <span className="font-medium">
                                                 {product.category}
-                                            </span>
-                                        </div>
-                                        <div className="flex justify-between border-b pb-2">
-                                            <span className="text-muted-foreground">
-                                                Material
-                                            </span>
-                                            <span className="font-medium">
-                                                {product.material}
                                             </span>
                                         </div>
                                         <div className="flex justify-between border-b pb-2">

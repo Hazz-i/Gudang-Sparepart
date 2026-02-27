@@ -39,9 +39,7 @@ export interface Product {
     status: string;
     stock: number;
     brand: string;
-    material: string;
     description: string;
-    warranty: string;
     category: string;
     image_url?: string;
     icon?: React.ComponentType;

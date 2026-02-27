@@ -125,7 +125,7 @@ export default function Welcome() {
                                 <div
                                     className="absolute inset-0 h-full w-full rotate-2 transform rounded-2xl bg-cover bg-center shadow-2xl transition-transform duration-500 hover:rotate-0"
                                     style={{
-                                        backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuAPREB0C-nwzck1ZkA7VvLDEa_SdSeTxhfR77XIPmzT7FGf5Y-H5JFI6DyU3LyOdKTd7IOYkkIGl5YGgbV8i6UkhR0oRE_kxULMY8NAHhzK27u1wextPPTCKEeGH5xkmLVetZpdEQlUteoOj0KGAHhD621RoYJqhH5aaEibKqGZ9sGl1QYQWf-IJPTGTjMGSrC6uZoWM6rrZ7wdr4Pu2c8yY2TAWmMsl9djvzswecuXXZHgb97XHi3Qk5OoqJVu2QaKZWgRpxsOlag')`,
+                                        backgroundImage: `url('/background.jpg')`,
                                     }}
                                 />
                             </div>

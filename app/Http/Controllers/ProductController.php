@@ -61,9 +61,6 @@ class ProductController extends Controller
             'original_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'brand' => 'nullable|string|max:255',
-            'material' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-            'warranty' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
@@ -123,9 +120,6 @@ class ProductController extends Controller
             'original_price' => 'nullable|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'brand' => 'nullable|string|max:255',
-            'material' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-            'warranty' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
